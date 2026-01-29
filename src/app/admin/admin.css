@@ -1,0 +1,454 @@
+/* src/app/admin/admin.css - VERSI FIX LENGKAP */
+
+/* =========================================
+   1. ISOLATION & VARIABLES
+   ========================================= */
+#admin-scope {
+    /* --- DEFINISI VARIABEL --- */
+    --adm-bg: #F1F5F9;
+    --adm-sidebar: #0B1B34;
+    --adm-text: #334155;
+    --adm-muted: #94A3B8;
+    --adm-primary: #2563EB;
+    --adm-border: #E2E8F0;
+    --sidebar-w: 260px;
+    /* Lebar Sidebar Tetap */
+
+    /* --- RESET GLOBAL SCOPE --- */
+    background-color: var(--adm-bg);
+    color: var(--adm-text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+#admin-scope * {
+    box-sizing: border-box;
+}
+
+#admin-scope a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#admin-scope button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* =========================================
+   2. FIX HEADER OVERLAP & LAYOUT
+   ========================================= */
+
+/* FIX UTAMA: Reset Header agar tidak Fixed/Melayang menutupi konten */
+#admin-scope header {
+    position: static !important;
+    height: auto !important;
+    width: 100% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-bottom: 32px !important;
+    z-index: 1 !important;
+    display: flex !important;
+}
+
+#admin-scope .admin-layout {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    background-color: var(--adm-bg);
+}
+
+/* SIDEBAR KIRI (FIXED) */
+#admin-scope .admin-sidebar {
+    width: 260px;
+    /* Fallback width */
+    width: var(--sidebar-w);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: var(--adm-sidebar);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+}
+
+/* KONTEN KANAN (FLUID) */
+#admin-scope .admin-content {
+    margin-left: 260px;
+    /* Fallback margin */
+    margin-left: var(--sidebar-w);
+    width: calc(100% - 260px);
+    width: calc(100% - var(--sidebar-w));
+    flex: 1;
+    padding: 40px;
+}
+
+/* =========================================
+   3. SIDEBAR NAVIGATION
+   ========================================= */
+
+#admin-scope .sidebar-logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: white;
+    padding-bottom: 24px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+/* FIX MENU MENCAR: Paksa menu rapat ke atas */
+#admin-scope .admin-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start !important;
+    gap: 8px;
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+}
+
+#admin-scope .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: var(--adm-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+#admin-scope .nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+#admin-scope .nav-item.active {
+    background: var(--adm-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+#admin-scope .nav-item i {
+    width: 20px;
+    text-align: center;
+}
+
+#admin-scope .nav-logout {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #EF4444;
+}
+
+#admin-scope .nav-logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+}
+
+/* =========================================
+   4. TABLES, BUTTONS & CARDS
+   ========================================= */
+
+#admin-scope .card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E2E8F0;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+#admin-scope .card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--adm-text);
+    margin: 0;
+}
+
+#admin-scope .stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+    display: block;
+}
+
+#admin-scope .clean-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#admin-scope .clean-table th {
+    text-align: left;
+    padding: 16px;
+    background: #F8FAFC;
+    color: var(--adm-muted);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+#admin-scope .clean-table td {
+    padding: 16px;
+    border-bottom: 1px solid #E2E8F0;
+    color: var(--adm-text);
+    vertical-align: middle;
+}
+
+#admin-scope .input-clean {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #CBD5E1;
+    background: #F8FAFC;
+    outline: none;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+#admin-scope .input-clean:focus {
+    border-color: var(--adm-primary);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* --- SEARCH WRAPPER SYSTEM --- */
+#admin-scope .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#admin-scope .search-wrapper i {
+    position: absolute;
+    left: 20px !important;
+    /* Geser ikon lebih ke kanan dari tepi */
+    color: var(--adm-muted);
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 5;
+}
+
+#admin-scope .search-wrapper .input-clean {
+    padding-left: 52px !important;
+    /* Beri ruang yang cukup untuk ikon */
+}
+
+/* --- MODAL SYSTEM FIX --- */
+#admin-scope .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 999999;
+    /* Sangat tinggi */
+}
+
+#admin-scope .modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#admin-scope .btn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#admin-scope .btn-primary {
+    background: var(--adm-primary);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+#admin-scope .btn-primary:hover {
+    background: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+#admin-scope .btn-primary:active {
+    transform: translateY(0);
+}
+
+#admin-scope .btn-sm {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --- STYLE UNTUK TOMBOL AKSI (EDIT, VIEW, DELETE) --- */
+#admin-scope .btn-icon {
+    width: 80px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 0.9rem;
+    padding: 0 12px;
+}
+
+#admin-scope .btn-view {
+    background: #E0F2FE;
+    color: #0284C7;
+}
+
+#admin-scope .btn-view:hover {
+    background: #0284C7;
+    color: white;
+}
+
+#admin-scope .btn-download {
+    background: #D1FAE5;
+    /* Emerald 100 */
+    color: #059669;
+    /* Emerald 600 */
+}
+
+#admin-scope .btn-download:hover {
+    background: #059669;
+    color: white;
+}
+
+#admin-scope .btn-edit {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+#admin-scope .btn-edit:hover {
+    background: #D97706;
+    color: white;
+}
+
+#admin-scope .btn-delete {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+#admin-scope .btn-delete:hover {
+    background: #DC2626;
+    color: white;
+}
+
+/* --- TOGGLE SWITCH (Custom CSS for Stability) --- */
+#admin-scope .toggle-switch {
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    position: relative;
+    border-radius: 99px;
+    background-color: #E2E8F0;
+    /* Default OFF */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+    padding: 0;
+}
+
+#admin-scope .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#admin-scope .toggle-switch.active {
+    background-color: var(--adm-primary);
+    /* ON Color */
+}
+
+#admin-scope .toggle-switch.active::after {
+    transform: translateX(20px);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    #admin-scope .admin-sidebar {
+        display: none;
+    }
+
+    #admin-scope .admin-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+#admin-scope .border-dashed {
+    border-style: dashed !important;
+    border-width: 2px !important;
+    border-color: #CBD5E1 !important;
+}
+
+#admin-scope .bg-gray-50 {
+    background-color: #F8FAFC !important;
+}
+
+#admin-scope .upload-area {
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}

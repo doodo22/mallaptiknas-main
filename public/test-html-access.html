@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test HTML File Access</title>
+</head>
+<body>
+    <h1>Test Access to Uploaded HTML File</h1>
+    
+    <div>
+        <h2>Method 1: Iframe</h2>
+        <iframe 
+            src="/uploads/terms/1768592403789-SYARAT-DAN-KETENTUAN-APLIKASI-MA.htm" 
+            width="100%" 
+            height="500"
+            style="border: 1px solid #ccc;">
+        </iframe>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <h2>Method 2: Fetch and Display</h2>
+        <div id="content">Loading...</div>
+        <button onclick="loadHtml()">Load HTML Content</button>
+    </div>
+    
+    <script>
+    async function loadHtml() {
+        try {
+            const response = await fetch('/uploads/terms/1768592403789-SYARAT-DAN-KETENTUAN-APLIKASI-MA.htm');
+            
+            console.log('Response status:', response.status);
+            console.log('Response headers:', [...response.headers.entries()]);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const html = await response.text();
+            console.log('First 500 chars:', html.substring(0, 500));
+            
+            // Try to display
+            document.getElementById('content').innerHTML = html;
+            
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('content').innerHTML = 
+                `<div style="color: red;">Error: ${error.message}</div>`;
+        }
+    }
+    
+    // Auto load on page load
+    window.onload = loadHtml;
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "name": "Industry News",
+        "color": "blue"
+    },
+    {
+        "id": 2,
+        "name": "Bisnis & SCM",
+        "color": "blue"
+    },
+    {
+        "id": 3,
+        "name": "Tutorial",
+        "color": "blue"
+    },
+    {
+        "id": 4,
+        "name": "Tips IT",
+        "color": "blue"
+    },
+    {
+        "id": 5,
+        "name": "Trend",
+        "color": "blue"
+    }
+]
