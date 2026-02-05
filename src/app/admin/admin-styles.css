@@ -22,7 +22,7 @@
 }
 
 .clean-table tbody tr:hover {
-    background-color: #f9fafb;
+    background-color: rgba(51, 65, 85, 0.3);
 }
 
 .clean-table tbody tr:last-child td {
@@ -246,6 +246,7 @@
         transform: translateX(100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -261,6 +262,7 @@
         transform: scale(0.95) translateY(10px);
         opacity: 0;
     }
+
     to {
         transform: scale(1) translateY(0);
         opacity: 1;
@@ -277,9 +279,12 @@
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
+
     50% {
         opacity: .5;
     }
@@ -303,11 +308,11 @@ textarea.input-clean::placeholder {
     .card {
         padding: 1.5rem !important;
     }
-    
+
     textarea.input-clean {
         min-height: 250px !important;
     }
-    
+
     .grid.grid-cols-1.md\:grid-cols-2 {
         grid-template-columns: 1fr !important;
         gap: 1rem !important;

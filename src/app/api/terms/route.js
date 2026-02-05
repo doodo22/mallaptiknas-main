@@ -47,14 +47,18 @@ export async function POST(request) {
         const terms = await readJson('terms.json');
         const newId = terms.length > 0 ? Math.max(...terms.map(t => t.id)) + 1 : 1;
 
+        const dateVal = data.get('date');
+        const finalDate = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
+
         const newTerm = {
             id: newId,
             title: title.trim(),
+            slug: title.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
             revision: revision.trim(),
             url: urlTarget,
             content: content.trim(),
             isActive: true,
-            date: new Date().toISOString()
+            date: finalDate
         };
 
         terms.push(newTerm);

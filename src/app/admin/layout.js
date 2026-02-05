@@ -1,6 +1,7 @@
 // src/app/admin/layout.js
 import "./admin.css";
 import "./admin-styles.css";
+import "./admin-gap-fix.css";
 
 export const metadata = {
   title: 'Admin Dashboard',

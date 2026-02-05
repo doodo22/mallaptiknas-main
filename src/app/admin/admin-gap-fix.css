@@ -1,0 +1,28 @@
+/* Force gap spacing for grid and flex containers */
+#admin-scope .grid {
+    display: grid;
+}
+
+#admin-scope .grid[class*="gap-"] {
+    gap: var(--grid-gap, 1rem);
+}
+
+#admin-scope .grid.gap-8 {
+    --grid-gap: 2rem;
+}
+
+#admin-scope .grid.gap-10 {
+    --grid-gap: 2.5rem;
+}
+
+#admin-scope .flex[class*="gap-"] {
+    gap: var(--flex-gap, 0.5rem);
+}
+
+#admin-scope .flex.gap-2 {
+    --flex-gap: 0.5rem;
+}
+
+#admin-scope .flex.gap-3 {
+    --flex-gap: 0.75rem;
+}

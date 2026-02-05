@@ -9,7 +9,7 @@ export async function GET(request, { params }) {
         const { id } = await params;
         const terms = await readJson('terms.json');
         const term = terms.find(t => t.id === parseInt(id));
-        
+
         if (!term) {
             return NextResponse.json({ error: "S&K tidak ditemukan" }, { status: 404 });
         }
@@ -24,7 +24,7 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
     try {
         const { id } = await params;
-        const data = await request.json();
+        const data = await request.formData();
         const terms = await readJson('terms.json');
         const index = terms.findIndex(t => t.id === parseInt(id));
 
@@ -32,12 +32,26 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ error: "S&K tidak ditemukan" }, { status: 404 });
         }
 
+        const title = data.get('title');
+        const revision = data.get('revision');
+        const url = data.get('url');
+        const content = data.get('content');
+        const date = data.get('date');
+
         // Update data
         terms[index] = {
             ...terms[index],
-            ...data,
-            date: new Date().toISOString()
+            title: title || terms[index].title,
+            revision: revision || terms[index].revision,
+            url: url || terms[index].url,
+            content: content || terms[index].content,
+            date: date ? new Date(date).toISOString() : terms[index].date
         };
+
+        // Jika ada isActive toggle (sebagai string karena dari formData)
+        if (data.get('isActive') !== null) {
+            terms[index].isActive = data.get('isActive') === 'true';
+        }
 
         await writeJson('terms.json', terms);
         return NextResponse.json({ message: "S&K berhasil diperbarui" });

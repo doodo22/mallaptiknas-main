@@ -33,5 +33,5 @@ export async function middleware(request) {
 
 // Tambahkan /login dan /register ke matcher agar middleware berjalan di sana
 export const config = {
-    matcher: ["/admin/:path*", "/login", "/register"],
+    matcher: ["/admin", "/admin/:path*", "/login", "/register"],
 };

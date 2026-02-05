@@ -5,12 +5,12 @@
    ========================================= */
 #admin-scope {
     /* --- DEFINISI VARIABEL --- */
-    --adm-bg: #F1F5F9;
+    --adm-bg: #0F172A;
     --adm-sidebar: #0B1B34;
-    --adm-text: #334155;
+    --adm-text: #E2E8F0;
     --adm-muted: #94A3B8;
-    --adm-primary: #2563EB;
-    --adm-border: #E2E8F0;
+    --adm-primary: #3B82F6;
+    --adm-border: #334155;
     --sidebar-w: 260px;
     /* Lebar Sidebar Tetap */
 
@@ -169,18 +169,19 @@
    ========================================= */
 
 #admin-scope .card {
-    background: white;
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(10px);
     border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(148, 163, 184, 0.2);
     padding: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
 #admin-scope .card h3 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--adm-text);
+    color: #F1F5F9;
     margin: 0;
 }
 
@@ -200,8 +201,8 @@
 #admin-scope .clean-table th {
     text-align: left;
     padding: 16px;
-    background: #F8FAFC;
-    color: var(--adm-muted);
+    background: rgba(15, 23, 42, 0.5);
+    color: #94A3B8;
     font-weight: 700;
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -209,8 +210,8 @@
 
 #admin-scope .clean-table td {
     padding: 16px;
-    border-bottom: 1px solid #E2E8F0;
-    color: var(--adm-text);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    color: #E2E8F0;
     vertical-align: middle;
 }
 
@@ -218,8 +219,9 @@
     width: 100%;
     padding: 12px 16px;
     border-radius: 10px;
-    border: 1px solid #CBD5E1;
-    background: #F8FAFC;
+    border: 1px solid rgba(51, 65, 85, 0.6);
+    background: rgba(15, 23, 42, 0.5);
+    color: #E2E8F0;
     outline: none;
     transition: all 0.2s ease;
     font-size: 0.95rem;
@@ -227,8 +229,12 @@
 
 #admin-scope .input-clean:focus {
     border-color: var(--adm-primary);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    background: rgba(30, 41, 59, 0.8);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+#admin-scope .input-clean::placeholder {
+    color: #64748B;
 }
 
 /* --- SEARCH WRAPPER SYSTEM --- */
@@ -271,12 +277,14 @@
 }
 
 #admin-scope .modal-content {
-    background: white;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
     border-radius: 20px;
     width: 100%;
     max-width: 500px;
     padding: 32px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     position: relative;
     animation: modalSlideUp 0.3s ease-out;
 }

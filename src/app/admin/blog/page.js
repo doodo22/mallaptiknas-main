@@ -14,9 +14,6 @@ export default function AdminBlogPage() {
     const [terms, setTerms] = useState([]);
 
     // Modal & View States
-    const [showTermModal, setShowTermModal] = useState(false);
-    const [showUploadModal, setShowUploadModal] = useState(false);
-    const [showAddUserModal, setShowAddUserModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedTermFile, setSelectedTermFile] = useState("");
     const [view, setView] = useState("list");
@@ -42,6 +39,7 @@ export default function AdminBlogPage() {
     const [termFile, setTermFile] = useState(null);
 
     // Form State (Tambah User)
+    const [showAddUserModal, setShowAddUserModal] = useState(false);
     const [newUserForm, setNewUserForm] = useState({ username: "", password: "" });
 
     // Sorting State
@@ -257,37 +255,23 @@ export default function AdminBlogPage() {
         }
     };
 
-    const handleToggleStatus = async (id, currentStatus) => {
-        await fetch(`/api/terms/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ isActive: !currentStatus })
+    const handleEditTerm = (term) => {
+        setTermForm({
+            title: term.title,
+            revision: term.revision,
+            url: term.url || "",
+            content: term.content || ""
         });
-        fetchTerms();
+        // Logic for view switching if applicable, but for now just disabling popup
+    };
+
+    const handleToggleStatus = async (id, currentStatus) => {
+        // Implementation disabled as requested
     };
 
     const handleSubmitTerm = async (e) => {
         e.preventDefault();
-        if (!termForm.title || !termForm.revision || !termForm.content) {
-            return alert("Judul, revisi, dan konten harus diisi");
-        }
-        
-        const d = new FormData();
-        d.append('title', termForm.title);
-        d.append('revision', termForm.revision);
-        d.append('url', termForm.url);
-        d.append('content', termForm.content);
-        
-        const res = await fetch('/api/terms', { method: 'POST', body: d });
-        if (res.ok) {
-            setTermForm({ title: "", revision: "", url: "", content: "" });
-            setTermFile(null);
-            setShowUploadModal(false);
-            fetchTerms();
-        } else {
-            const error = await res.json();
-            alert(error.error || "Gagal menyimpan S&K");
-        }
+        // Disabled
     };
 
     const filteredTerms = terms.filter(t =>
@@ -562,7 +546,7 @@ export default function AdminBlogPage() {
                                             onChange={e => setSearchTerm(e.target.value)}
                                         />
                                     </div>
-                                    <button onClick={() => setShowUploadModal(true)} className="btn btn-primary whitespace-nowrap">
+                                    <button onClick={() => { /* setShowUploadModal(true) */ }} className="btn btn-primary whitespace-nowrap">
                                         <i className="fas fa-plus mr-1 md:mr-2"></i>
                                         <span className="hidden sm:inline">Tambah S&K</span>
                                         <span className="sm:hidden">Tambah</span>
@@ -595,7 +579,7 @@ export default function AdminBlogPage() {
                                                 </td>
                                                 <td className="text-right">
                                                     <div className="flex justify-end gap-2">
-                                                        <button onClick={() => handleDeleteTerm(t.id)} className="btn-icon btn-delete"><i className="fas fa-trash"></i></button>
+                                                        <button onClick={() => handleEditTerm(t)} className="btn-icon btn-edit" title="Edit SNK">Edit</button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -610,84 +594,6 @@ export default function AdminBlogPage() {
             </div>
 
             {/* OVERLAY MODALS */}
-            {showUploadModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold">Tambah S&K Baru</h3>
-                            <button onClick={() => setShowUploadModal(false)} className="text-gray-400 hover:text-black">
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <form onSubmit={handleSubmitTerm} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Judul Dokumen</label>
-                                <input className="input-clean" value={termForm.title} onChange={e => setTermForm({ ...termForm, title: e.target.value })} placeholder="Contoh: S&K Marketplace" required />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Versi Revisi</label>
-                                <input className="input-clean" value={termForm.revision} onChange={e => setTermForm({ ...termForm, revision: e.target.value })} placeholder="Contoh: v1.0" required />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-400 mb-1">URL Target</label>
-                                <select 
-                                    className="input-clean" 
-                                    value={termForm.url} 
-                                    onChange={e => setTermForm({ ...termForm, url: e.target.value })} 
-                                    required
-                                >
-                                    <option value="">Pilih halaman tujuan</option>
-                                    <option value="/blog/sk-scm">/blog/sk-scm (S&K SCM)</option>
-                                    <option value="/help">/help (Bantuan)</option>
-                                    <option value="/platform">/platform (Platform)</option>
-                                    <option value="/auth">/auth (Login/Register)</option>
-                                    <option value="/admin">/admin (Admin Panel)</option>
-                                </select>
-                                <p className="text-[10px] text-gray-400 mt-1">Pilih halaman tempat S&K akan ditampilkan</p>
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Konten Syarat dan Ketentuan</label>
-                                <textarea 
-                                    className="input-clean h-64" 
-                                    value={termForm.content} 
-                                    onChange={e => setTermForm({ ...termForm, content: e.target.value })} 
-                                    placeholder="Masukkan isi syarat dan ketentuan..." 
-                                    required 
-                                />
-                                <p className="text-[10px] text-gray-400 mt-1">Gunakan format HTML sederhana atau text biasa. Contoh: &lt;h3&gt;1. Definisi&lt;/h3&gt;&lt;p&gt;Penjelasan...&lt;/p&gt;</p>
-                            </div>
-                            <div className="pt-4 flex gap-3">
-                                <button type="button" onClick={() => setShowUploadModal(false)} className="btn btn-light flex-1">Batal</button>
-                                <button type="submit" className="btn btn-primary flex-1">Simpan Data</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {showTermModal && (
-                <div className="fixed inset-0 flex items-center justify-center p-4" style={{ zIndex: 99999 }}>
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowTermModal(false)}></div>
-                    <div className="bg-white rounded-2xl w-full max-w-5xl h-[90vh] shadow-2xl relative flex flex-col overflow-hidden animate-pop" onClick={e => e.stopPropagation()}>
-                        <div className="p-4 border-b flex justify-between items-center bg-gray-50">
-                            <h3 className="font-bold flex items-center gap-2"><i className="fas fa-file-alt text-blue-500"></i> Preview Dokumen</h3>
-                            <button onClick={() => setShowTermModal(false)} className="bg-gray-200 hover:bg-black hover:text-white w-8 h-8 rounded-full flex items-center justify-center transition-all"><i className="fas fa-times"></i></button>
-                        </div>
-                        <div className="flex-1 bg-gray-100 p-4">
-                            {selectedTermFile.toLowerCase().endsWith('.pdf') ? (
-                                <iframe src={selectedTermFile} className="w-full h-full rounded shadow-inner border border-gray-300"></iframe>
-                            ) : (
-                                <div className="w-full h-full flex flex-col items-center justify-center text-center space-y-4">
-                                    <div className="bg-blue-100 text-blue-600 p-8 rounded-full"><i className="fas fa-file-word fa-4x"></i></div>
-                                    <h4 className="font-bold text-gray-700">Pratinjau Tidak Tersedia</h4>
-                                    <p className="text-gray-500 text-sm max-w-xs">Dokumen ini bertipe non-PDF. Silakan klik tombol di bawah untuk mengunduh dan membaca isinya.</p>
-                                    <a href={selectedTermFile} download className="btn btn-primary px-10"><i className="fas fa-download mr-2"></i> Unduh Sekarang</a>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {showAddUserModal && (
                 <div className="modal-overlay">
@@ -701,23 +607,23 @@ export default function AdminBlogPage() {
                         <form onSubmit={handleAddUser} className="space-y-4">
                             <div>
                                 <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Username</label>
-                                <input 
-                                    className="input-clean" 
-                                    value={newUserForm.username} 
-                                    onChange={e => setNewUserForm({...newUserForm, username: e.target.value})} 
-                                    placeholder="Masukkan username" 
-                                    required 
+                                <input
+                                    className="input-clean"
+                                    value={newUserForm.username}
+                                    onChange={e => setNewUserForm({ ...newUserForm, username: e.target.value })}
+                                    placeholder="Masukkan username"
+                                    required
                                 />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold uppercase text-gray-400 mb-1">Password</label>
-                                <input 
+                                <input
                                     type="password"
-                                    className="input-clean" 
-                                    value={newUserForm.password} 
-                                    onChange={e => setNewUserForm({...newUserForm, password: e.target.value})} 
-                                    placeholder="Masukkan password" 
-                                    required 
+                                    className="input-clean"
+                                    value={newUserForm.password}
+                                    onChange={e => setNewUserForm({ ...newUserForm, password: e.target.value })}
+                                    placeholder="Masukkan password"
+                                    required
                                 />
                             </div>
                             <div className="pt-4 flex gap-3">

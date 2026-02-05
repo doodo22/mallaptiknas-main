@@ -40,7 +40,7 @@ const Footer = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="/blog/sk-scm">Syarat & Ketentuan</a>
+                                <a href="/snk">Syarat & Ketentuan</a>
                             </li>
                         </ul>
                     </div>
