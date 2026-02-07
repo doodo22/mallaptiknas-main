@@ -57,7 +57,7 @@ export default function AdminMainPage() {
     const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
 
     // Settings State
-    const [socialSettings, setSocialSettings] = useState({ instagram: "", facebook: "", youtube: "" });
+    const [socialSettings, setSocialSettings] = useState({ instagram: "", tiktok: "", youtube: "", linkedin: "" });
     const [isSavingSettings, setIsSavingSettings] = useState(false);
 
     // Notification helper
@@ -632,13 +632,13 @@ export default function AdminMainPage() {
                                         </div>
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-300 mb-2">
-                                                <i className="fab fa-facebook text-blue-600 mr-2 w-5 text-center"></i> Facebook Link
+                                                <i className="fab fa-tiktok text-white mr-2 w-5 text-center"></i> TikTok Link
                                             </label>
                                             <input
                                                 className="input-clean"
-                                                value={socialSettings.facebook}
-                                                onChange={e => setSocialSettings({ ...socialSettings, facebook: e.target.value })}
-                                                placeholder="https://facebook.com/..."
+                                                value={socialSettings.tiktok}
+                                                onChange={e => setSocialSettings({ ...socialSettings, tiktok: e.target.value })}
+                                                placeholder="https://tiktok.com/@..."
                                             />
                                         </div>
                                         <div>
@@ -650,6 +650,17 @@ export default function AdminMainPage() {
                                                 value={socialSettings.youtube}
                                                 onChange={e => setSocialSettings({ ...socialSettings, youtube: e.target.value })}
                                                 placeholder="https://youtube.com/..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-300 mb-2">
+                                                <i className="fab fa-linkedin-in text-blue-500 mr-2 w-5 text-center"></i> LinkedIn Link
+                                            </label>
+                                            <input
+                                                className="input-clean"
+                                                value={socialSettings.linkedin}
+                                                onChange={e => setSocialSettings({ ...socialSettings, linkedin: e.target.value })}
+                                                placeholder="https://linkedin.com/in/..."
                                             />
                                         </div>
                                         <div className="pt-2">

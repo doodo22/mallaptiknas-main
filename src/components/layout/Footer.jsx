@@ -5,14 +5,15 @@ import { usePathname } from "next/navigation";
 
 const Footer = () => {
     const pathname = usePathname();
-    const [social, setSocial] = React.useState({ instagram: "#", facebook: "#", youtube: "#" });
+    const [social, setSocial] = React.useState({ instagram: "#", tiktok: "#", youtube: "#", linkedin: "#" });
 
     React.useEffect(() => {
         // Fetch social links
         fetch('/api/settings')
             .then(res => res.json())
             .then(data => {
-                if (data.social) setSocial(data.social);
+                if (data.success && data.data.social) setSocial(data.data.social);
+                else if (data.social) setSocial(data.social);
             })
             .catch(err => console.error(err));
     }, []);
@@ -65,13 +66,18 @@ const Footer = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href={social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook">
-                                    <i className="fab fa-facebook-f"></i> Facebook
+                                <a href={social.tiktok} target="_blank" rel="noreferrer" aria-label="TikTok">
+                                    <i className="fab fa-tiktok"></i> TikTok
                                 </a>
                             </li>
                             <li>
                                 <a href={social.youtube} target="_blank" rel="noreferrer" aria-label="YouTube">
                                     <i className="fab fa-youtube"></i> YouTube
+                                </a>
+                            </li>
+                            <li>
+                                <a href={social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                                    <i className="fab fa-linkedin-in"></i> LinkedIn
                                 </a>
                             </li>
                         </ul>
