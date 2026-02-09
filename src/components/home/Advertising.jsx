@@ -31,8 +31,8 @@ const Advertising = () => {
                             <span className="period">/ bulan</span>
                         </div>
                         <p className="promo-note">Khusus tahun 2026, nikmati diskon 50% untuk semua paket iklan.</p>
-                        <a href="https://wa.me/6282123465877" target="_blank" rel="noreferrer" className="btn-wa">
-                            <i className="fab fa-whatsapp"></i> Hubungi via WhatsApp
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqTwwTkH_Ds64e559DvgP3YRTyqJ8HKjHuhgebBkrjtqEzig/viewform?usp=publish-editor" target="_blank" rel="noreferrer" className="btn-contact">
+                            <i className="fas fa-paper-plane"></i> Hubungi kami
                         </a>
                     </div>
 
@@ -198,8 +198,8 @@ const Advertising = () => {
                     margin-bottom: 30px;
                 }
 
-                .btn-wa {
-                    background: #25D366;
+                .btn-contact {
+                    background: var(--brand-blue);
                     color: white !important;
                     padding: 15px 30px;
                     border-radius: 12px;
@@ -211,10 +211,10 @@ const Advertising = () => {
                     transition: transform 0.3s ease, background 0.3s ease;
                 }
 
-                .btn-wa:hover {
+                .btn-contact:hover {
                     transform: translateY(-3px);
-                    background: #1eb954;
-                    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+                    background: var(--brand-blue-hover);
+                    box-shadow: 0 10px 20px rgba(0, 174, 239, 0.2);
                 }
 
                 .ad-card-list {
