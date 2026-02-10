@@ -57,7 +57,7 @@ export default function AdminMainPage() {
     const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
 
     // Settings State
-    const [socialSettings, setSocialSettings] = useState({ instagram: "", tiktok: "", youtube: "", linkedin: "" });
+    const [socialSettings, setSocialSettings] = useState({ instagram: "", tiktok: "", youtube: "", linkedin: "", googleForm: "" });
     const [isSavingSettings, setIsSavingSettings] = useState(false);
 
     // Notification helper
@@ -209,10 +209,22 @@ export default function AdminMainPage() {
             }
             const data = await res.json();
             if (data.success && data.data?.social) {
-                setSocialSettings(data.data.social);
+                setSocialSettings({
+                    instagram: data.data.social.instagram || "",
+                    tiktok: data.data.social.tiktok || "",
+                    youtube: data.data.social.youtube || "",
+                    linkedin: data.data.social.linkedin || "",
+                    googleForm: data.data.social.googleForm || ""
+                });
             } else if (data.social) {
                 // Fallback untuk format lama
-                setSocialSettings(data.social);
+                setSocialSettings({
+                    instagram: data.social.instagram || "",
+                    tiktok: data.social.tiktok || "",
+                    youtube: data.social.youtube || "",
+                    linkedin: data.social.linkedin || "",
+                    googleForm: data.social.googleForm || ""
+                });
             }
         } catch (err) {
             console.error("Gagal load settings", err);
@@ -661,6 +673,17 @@ export default function AdminMainPage() {
                                                 value={socialSettings.linkedin}
                                                 onChange={e => setSocialSettings({ ...socialSettings, linkedin: e.target.value })}
                                                 placeholder="https://linkedin.com/in/..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-300 mb-2">
+                                                <i className="fab fa-google text-green-500 mr-2 w-5 text-center"></i> Link Google Form (Hubungi Kami)
+                                            </label>
+                                            <input
+                                                className="input-clean"
+                                                value={socialSettings.googleForm}
+                                                onChange={e => setSocialSettings({ ...socialSettings, googleForm: e.target.value })}
+                                                placeholder="https://docs.google.com/forms/..."
                                             />
                                         </div>
                                         <div className="pt-2">

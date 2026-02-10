@@ -2,6 +2,27 @@
 import React from 'react';
 
 const Advertising = () => {
+    const [googleFormUrl, setGoogleFormUrl] = React.useState("https://docs.google.com/forms/d/e/1FAIpQLSeqTwwTkH_Ds64e559DvgP3YRTyqJ8HKjHuhgebBkrjtqEzig/viewform?usp=publish-editor");
+
+    React.useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch('/api/settings');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && data.data?.social?.googleForm) {
+                        setGoogleFormUrl(data.data.social.googleForm);
+                    } else if (data.social?.googleForm) {
+                        setGoogleFormUrl(data.social.googleForm);
+                    }
+                }
+            } catch (error) {
+                console.error("Gagal load contact link:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
+
     return (
         <section id="advertising" className="cp-section cp-section--alt reveal">
             <div className="container">
@@ -31,7 +52,7 @@ const Advertising = () => {
                             <span className="period">/ bulan</span>
                         </div>
                         <p className="promo-note">Khusus tahun 2026, nikmati diskon 50% untuk semua paket iklan.</p>
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqTwwTkH_Ds64e559DvgP3YRTyqJ8HKjHuhgebBkrjtqEzig/viewform?usp=publish-editor" target="_blank" rel="noreferrer" className="btn-contact">
+                        <a href={googleFormUrl} target="_blank" rel="noreferrer" className="btn-contact">
                             <i className="fas fa-paper-plane"></i> Hubungi kami
                         </a>
                     </div>

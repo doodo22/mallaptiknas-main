@@ -26,11 +26,13 @@ const BlogFeed = () => {
             try {
                 // 1. Fetch Semua Post (Feed Utama)
                 const resPosts = await fetch('/api/blog');
+                if (!resPosts.ok) throw new Error("Gagal load feed utama");
                 const dataPosts = await resPosts.json();
                 setPosts(Array.isArray(dataPosts) ? dataPosts : []);
 
                 // 2. Fetch Trending (Sidebar)
                 const resTrending = await fetch('/api/blog/trending');
+                if (!resTrending.ok) throw new Error("Gagal load trending");
                 const dataTrending = await resTrending.json();
                 setTrendingPosts(Array.isArray(dataTrending) ? dataTrending : []);
 
