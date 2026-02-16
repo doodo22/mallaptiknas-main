@@ -1,66 +1,48 @@
 import { NextResponse } from 'next/server';
-import { readJson, writeJson } from '@/lib/jsonDb';
+import { supabase } from '@/lib/supabase';
 import { successResponse, errorResponse } from '@/lib/apiHelpers';
-import path from 'path';
-import fs from 'fs';
 
-// Helper khusus untuk settings karena strukturnya object bukan array of objects
-const dataPath = path.join(process.cwd(), 'src/data/settings.json');
-
-async function getSettings() {
-    if (!fs.existsSync(dataPath)) {
-        return { social: { instagram: '#', facebook: '#', youtube: '#' } };
-    }
-    const fileContent = await fs.promises.readFile(dataPath, 'utf-8');
-    return JSON.parse(fileContent);
-}
-
-// GET: Ambil settings
+// GET: Ambil settings dari Supabase
 export async function GET() {
     try {
-        const settings = await readJson('settings.json');
-        return NextResponse.json(successResponse(settings));
-    } catch (error) {
-        // Jika file tidak ada, return default settings
-        if (error.code === 'ENOENT') {
+        const { data, error } = await supabase
+            .from('settings')
+            .select('*')
+            .eq('id', 1)
+            .single();
+
+        if (error) {
+            // Jika error karena data belum ada, kirim default
             const defaultSettings = {
-                social: {
-                    instagram: '',
-                    facebook: '',
-                    youtube: ''
-                },
-                site: {
-                    title: 'Mall APTIKNAS',
-                    description: 'Platform ekosistem teknologi terintegrasi'
-                }
+                social: { instagram: '', tiktok: '', youtube: '', linkedin: '', googleForm: '' },
+                site: { title: 'Mall APTIKNAS', description: 'Platform ekosistem teknologi terintegrasi' }
             };
             return NextResponse.json(successResponse(defaultSettings));
         }
+
+        return NextResponse.json(successResponse(data));
+    } catch (error) {
         return NextResponse.json(errorResponse(error.message), { status: 500 });
     }
 }
 
-// POST: Update settings
+// POST: Update settings di Supabase
 export async function POST(request) {
     try {
         const body = await request.json();
 
-        // Validasi minimal
         if (!body || typeof body !== 'object') {
-            return NextResponse.json(
-                errorResponse('Data settings tidak valid'),
-                { status: 400 }
-            );
+            return NextResponse.json(errorResponse('Data settings tidak valid'), { status: 400 });
         }
 
-        // Simpan settings
-        await writeJson('settings.json', body);
+        const { error } = await supabase
+            .from('settings')
+            .upsert({ id: 1, ...body });
 
-        return NextResponse.json(
-            successResponse(body, 'Settings berhasil diperbarui')
-        );
+        if (error) throw error;
+
+        return NextResponse.json(successResponse(body, 'Settings berhasil diperbarui'));
     } catch (error) {
         return NextResponse.json(errorResponse(error.message), { status: 500 });
     }
 }
-

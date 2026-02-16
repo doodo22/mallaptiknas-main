@@ -1,20 +1,32 @@
 import { NextResponse } from 'next/server';
-import { readJson } from '@/lib/jsonDb';
+import { supabase } from '@/lib/supabase';
 
 export async function GET() {
     try {
-        const posts = await readJson('posts.json');
+        // Ambil yang ditandai trending
+        let { data: trending, error } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('trending', true)
+            .limit(3);
 
-        // Ambil yang ditandai trending, atau ambil 3 terbaru sebagai fallback
-        let trending = posts.filter(p => p.trending === true);
+        if (error) throw error;
 
-        if (trending.length === 0) {
-            trending = posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 3);
+        // Fallback: ambil 3 terbaru
+        if (!trending || trending.length === 0) {
+            const { data: latest, error: err2 } = await supabase
+                .from('posts')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            if (err2) throw err2;
+            trending = latest;
         }
 
-        return NextResponse.json(trending.slice(0, 3));
+        return NextResponse.json(trending || []);
     } catch (error) {
-        console.error("JSON Read Error:", error);
+        console.error("Supabase Error:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

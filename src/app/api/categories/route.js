@@ -1,50 +1,54 @@
 import { NextResponse } from 'next/server';
-import { readJson, writeJson } from '@/lib/jsonDb';
+import { supabase } from '@/lib/supabase';
 import { validateRequired, successResponse, errorResponse } from '@/lib/apiHelpers';
 
-// GET: Ambil semua kategori dari JSON
+// GET: Ambil semua kategori dari Supabase
 export async function GET() {
     try {
-        const categories = await readJson('categories.json');
+        const { data: categories, error } = await supabase
+            .from('categories')
+            .select('*')
+            .order('name', { ascending: true });
+
+        if (error) throw error;
         return NextResponse.json(successResponse(categories));
     } catch (error) {
         return NextResponse.json(errorResponse(error.message), { status: 500 });
     }
 }
 
-// POST: Tambah kategori baru ke JSON
+// POST: Tambah kategori baru ke Supabase
 export async function POST(request) {
     try {
         const { name, color } = await request.json();
 
         // Validasi
         const validatedName = validateRequired(name, 'Nama kategori');
-        
-        const categories = await readJson('categories.json');
-        
+
         // Cek duplikat
-        const existingCategory = categories.find(c => 
-            c.name.toLowerCase() === validatedName.toLowerCase()
-        );
-        
-        if (existingCategory) {
+        const { data: existing } = await supabase
+            .from('categories')
+            .select('id')
+            .ilike('name', validatedName)
+            .single();
+
+        if (existing) {
             return NextResponse.json(
-                errorResponse('Kategori sudah ada'), 
+                errorResponse('Kategori sudah ada'),
                 { status: 400 }
             );
         }
 
-        const newId = categories.length > 0 ? Math.max(...categories.map(c => c.id)) + 1 : 1;
+        const { data: newCategory, error } = await supabase
+            .from('categories')
+            .insert([{
+                name: validatedName,
+                color: color || 'blue'
+            }])
+            .select()
+            .single();
 
-        const newCategory = {
-            id: newId,
-            name: validatedName,
-            color: color || 'blue',
-            created_at: new Date().toISOString()
-        };
-
-        categories.push(newCategory);
-        await writeJson('categories.json', categories);
+        if (error) throw error;
 
         return NextResponse.json(
             successResponse(newCategory, 'Kategori berhasil dibuat')

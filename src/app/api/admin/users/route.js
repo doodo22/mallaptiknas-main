@@ -1,136 +1,100 @@
 import { NextResponse } from 'next/server';
-import { readJson, writeJson } from '@/lib/jsonDb';
+import { supabase } from '@/lib/supabase';
 
-// GET: Ambil semua user dari JSON
+// GET: Ambil semua user dari Supabase
 export async function GET() {
     try {
-        const users = await readJson('users.json');
-        // Jangan kembalikan password
-        const safeUsers = users.map(({ password, ...user }) => user);
-        return NextResponse.json(safeUsers);
+        const { data: users, error } = await supabase
+            .from('users')
+            .select('id, username, is_active, created_at, role')
+            .order('id', { ascending: true });
+
+        if (error) throw error;
+        return NextResponse.json(users);
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
 
-// POST: Buat user baru
+// POST: Buat user baru di Supabase
 export async function POST(request) {
     try {
         const { username, password } = await request.json();
-        
+
         // Validasi input
-        if (!username || !username.trim()) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Username wajib diisi" 
-            }, { status: 400 });
-        }
-        
-        if (!password || password.length < 6) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Password minimal 6 karakter" 
-            }, { status: 400 });
-        }
+        if (!username || !username.trim()) return NextResponse.json({ success: false, error: "Username wajib diisi" }, { status: 400 });
+        if (!password || password.length < 6) return NextResponse.json({ success: false, error: "Password minimal 6 karakter" }, { status: 400 });
 
-        const users = await readJson('users.json');
-        
         // Cek jika username sudah ada
-        const existingUser = users.find(u => u.username.toLowerCase() === username.toLowerCase());
-        if (existingUser) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Username sudah digunakan" 
-            }, { status: 400 });
-        }
+        const { data: existing } = await supabase
+            .from('users')
+            .select('id')
+            .eq('username', username.trim())
+            .single();
 
-        // Generate ID baru
-        const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
-        
-        const newUser = {
-            id: newId,
-            username: username.trim(),
-            password: password, // TODO: Hash password di sini nanti
-            is_active: 1,
-            created_at: new Date().toISOString(),
-            role: 'user' // Tambahkan role
-        };
+        if (existing) return NextResponse.json({ success: false, error: "Username sudah digunakan" }, { status: 400 });
 
-        users.push(newUser);
-        await writeJson('users.json', users);
+        const { data: newUser, error } = await supabase
+            .from('users')
+            .insert([{
+                username: username.trim(),
+                password: password, // TODO: Hash password
+                is_active: 1,
+                role: 'user'
+            }])
+            .select('id, username, is_active, created_at, role')
+            .single();
 
-        // Jangan kembalikan password
-        const { password: _, ...safeUser } = newUser;
-        return NextResponse.json({ 
+        if (error) throw error;
+
+        return NextResponse.json({
             success: true,
-            message: "User berhasil dibuat", 
-            data: safeUser 
+            message: "User berhasil dibuat",
+            data: newUser
         });
 
     } catch (error) {
-        return NextResponse.json({ 
-            success: false,
-            error: error.message 
-        }, { status: 500 });
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
 
-// PUT: Update Status (Approve/Reject) di JSON
+// PUT: Update Status atau Profile di Supabase
 export async function PUT(request) {
     try {
         const { id, is_active, username } = await request.json();
-        
-        if (!id) {
-            return NextResponse.json({ 
-                success: false,
-                error: "ID user wajib diisi" 
-            }, { status: 400 });
-        }
 
-        const users = await readJson('users.json');
+        if (!id) return NextResponse.json({ success: false, error: "ID user wajib diisi" }, { status: 400 });
 
-        const index = users.findIndex(u => u.id === parseInt(id));
-        if (index === -1) {
-            return NextResponse.json({ 
-                success: false,
-                error: "User tidak ditemukan" 
-            }, { status: 404 });
-        }
-
-        // Update data
-        if (is_active !== undefined) {
-            users[index].is_active = is_active;
-        }
-        
+        const updateData = {};
+        if (is_active !== undefined) updateData.is_active = is_active;
         if (username && username.trim()) {
-            // Cek jika username baru sudah digunakan oleh user lain
-            const usernameExists = users.some((u, idx) => 
-                idx !== index && u.username.toLowerCase() === username.toLowerCase().trim()
-            );
-            
-            if (usernameExists) {
-                return NextResponse.json({ 
-                    success: false,
-                    error: "Username sudah digunakan" 
-                }, { status: 400 });
-            }
-            
-            users[index].username = username.trim();
+            // Cek duplikat username
+            const { data: dup } = await supabase
+                .from('users')
+                .select('id')
+                .eq('username', username.trim())
+                .neq('id', id)
+                .single();
+
+            if (dup) return NextResponse.json({ success: false, error: "Username sudah digunakan" }, { status: 400 });
+            updateData.username = username.trim();
         }
 
-        await writeJson('users.json', users);
-        
-        const { password, ...updatedUser } = users[index];
-        
-        return NextResponse.json({ 
+        const { data: updatedUser, error } = await supabase
+            .from('users')
+            .update(updateData)
+            .eq('id', id)
+            .select('id, username, is_active, created_at, role')
+            .single();
+
+        if (error) throw error;
+
+        return NextResponse.json({
             success: true,
             message: "Data user berhasil diperbarui",
             data: updatedUser
         });
     } catch (error) {
-        return NextResponse.json({ 
-            success: false,
-            error: error.message 
-        }, { status: 500 });
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }

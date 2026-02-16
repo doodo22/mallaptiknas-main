@@ -1,20 +1,23 @@
 import { NextResponse } from 'next/server';
-import { readJson, writeJson } from '@/lib/jsonDb';
+import { supabase } from '@/lib/supabase';
 import { writeFile } from 'fs/promises';
 import path from 'path';
 import fs from 'fs';
 
-// GET: Ambil Detail Artikel dari JSON
+// GET: Ambil Detail Artikel dari Supabase
 export async function GET(request, { params }) {
     try {
         const { id } = await params;
-        const posts = await readJson('posts.json');
-        const post = posts.find(p => p.id === parseInt(id));
+        const { data: post, error } = await supabase
+            .from('posts')
+            .select('*')
+            .eq('id', id)
+            .single();
 
-        if (!post) {
-            return NextResponse.json({ 
+        if (error || !post) {
+            return NextResponse.json({
                 success: false,
-                error: "Artikel tidak ditemukan" 
+                error: "Artikel tidak ditemukan"
             }, { status: 404 });
         }
 
@@ -23,14 +26,14 @@ export async function GET(request, { params }) {
             data: post
         });
     } catch (error) {
-        return NextResponse.json({ 
+        return NextResponse.json({
             success: false,
-            error: error.message 
+            error: error.message
         }, { status: 500 });
     }
 }
 
-// PUT: Update Artikel di JSON (Gunakan Local Upload untuk Konsistensi)
+// PUT: Update Artikel di Supabase
 export async function PUT(request, { params }) {
     try {
         const { id } = await params;
@@ -44,130 +47,70 @@ export async function PUT(request, { params }) {
         const file = data.get('imageFile');
 
         // Validasi input
-        if (title && title.trim().length < 3) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Judul minimal 3 karakter" 
-            }, { status: 400 });
-        }
-
-        if (category && category.trim().length < 2) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Kategori minimal 2 karakter" 
-            }, { status: 400 });
-        }
-
-        if (author && author.trim().length < 2) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Penulis minimal 2 karakter" 
-            }, { status: 400 });
-        }
-
-        if (content && content.trim().length < 10) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Konten minimal 10 karakter" 
-            }, { status: 400 });
-        }
+        if (title && title.trim().length < 3) return NextResponse.json({ success: false, error: "Judul minimal 3 karakter" }, { status: 400 });
 
         let imageUrl = null;
-
         if (file && typeof file !== 'string' && file.size > 0) {
-            // Validasi tipe file
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                return NextResponse.json({ 
-                    success: false,
-                    error: "Hanya file gambar yang diperbolehkan (JPEG, PNG, GIF, WebP)" 
-                }, { status: 400 });
-            }
-
-            // Validasi ukuran file (max 5MB)
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (file.size > maxSize) {
-                return NextResponse.json({ 
-                    success: false,
-                    error: "Ukuran file maksimal 5MB" 
-                }, { status: 400 });
-            }
-
             const buffer = Buffer.from(await file.arrayBuffer());
             const uploadDir = path.join(process.cwd(), 'public/uploads');
-
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            }
-
+            if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
             const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '-')}`;
             const filePath = path.join(uploadDir, filename);
             await writeFile(filePath, buffer);
             imageUrl = `/uploads/${filename}`;
         }
 
-        const posts = await readJson('posts.json');
-        const index = posts.findIndex(p => p.id === parseInt(id));
+        const updateData = {};
+        if (title) updateData.title = title.trim();
+        if (category) updateData.category = category.trim();
+        if (author) updateData.author = author.trim();
+        if (content) updateData.content = content.trim();
+        if (youtubeUrl !== null) updateData.youtubeUrl = youtubeUrl.trim();
+        if (imageUrl) updateData.image = imageUrl;
 
-        if (index === -1) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Artikel tidak ditemukan" 
-            }, { status: 404 });
-        }
+        const { data: updatedPost, error } = await supabase
+            .from('posts')
+            .update(updateData)
+            .eq('id', id)
+            .select()
+            .single();
 
-        posts[index] = {
-            ...posts[index],
-            title: title ? title.trim() : posts[index].title,
-            category: category ? category.trim() : posts[index].category,
-            author: author ? author.trim() : posts[index].author,
-            content: content ? content.trim() : posts[index].content,
-            youtubeUrl: youtubeUrl ? youtubeUrl.trim() : posts[index].youtubeUrl,
-            image: imageUrl || posts[index].image,
-            updated_at: new Date().toISOString()
-        };
+        if (error) throw error;
 
-        await writeJson('posts.json', posts);
-        return NextResponse.json({ 
+        return NextResponse.json({
             success: true,
             message: "Artikel berhasil diperbarui",
-            data: posts[index]
+            data: updatedPost
         });
 
     } catch (error) {
         console.error("Update Error:", error);
-        return NextResponse.json({ 
+        return NextResponse.json({
             success: false,
-            error: "Gagal update data: " + error.message 
+            error: "Gagal update data: " + error.message
         }, { status: 500 });
     }
 }
 
-// DELETE: Hapus artikel dari JSON
+// DELETE: Hapus artikel dari Supabase
 export async function DELETE(request, { params }) {
     try {
         const { id } = await params;
-        const posts = await readJson('posts.json');
-        const postIndex = posts.findIndex(p => p.id === parseInt(id));
+        const { error } = await supabase
+            .from('posts')
+            .delete()
+            .eq('id', id);
 
-        if (postIndex === -1) {
-            return NextResponse.json({ 
-                success: false,
-                error: "Artikel tidak ditemukan" 
-            }, { status: 404 });
-        }
+        if (error) throw error;
 
-        const filteredPosts = posts.filter(p => p.id !== parseInt(id));
-        await writeJson('posts.json', filteredPosts);
-        
-        return NextResponse.json({ 
+        return NextResponse.json({
             success: true,
             message: "Artikel berhasil dihapus"
         });
     } catch (error) {
-        return NextResponse.json({ 
+        return NextResponse.json({
             success: false,
-            error: error.message 
+            error: error.message
         }, { status: 500 });
     }
 }

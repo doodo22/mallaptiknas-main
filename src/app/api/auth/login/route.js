@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readJson } from "@/lib/jsonDb";
+import { supabase } from "@/lib/supabase";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 
@@ -7,11 +7,14 @@ export async function POST(request) {
     try {
         const { username, password } = await request.json();
 
-        // 1. Cek User di JSON
-        const users = await readJson('users.json');
-        const user = users.find(u => u.username === username);
+        // 1. Cek User di Supabase
+        const { data: user, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username)
+            .single();
 
-        if (!user) {
+        if (error || !user) {
             return NextResponse.json({ error: "Username tidak ditemukan" }, { status: 401 });
         }
 

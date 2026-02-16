@@ -1,21 +1,22 @@
 import { NextResponse } from 'next/server';
-import { readJson, writeJson } from '@/lib/jsonDb';
-import { writeFile } from 'fs/promises';
-import path from 'path';
-import fs from 'fs';
+import { supabase } from '@/lib/supabase';
 
-// GET: Ambil semua S&K
+// GET: Ambil semua S&K dari Supabase
 export async function GET() {
     try {
-        const terms = await readJson('terms.json');
-        const sortedTerms = terms.sort((a, b) => new Date(b.date) - new Date(a.date));
-        return NextResponse.json(sortedTerms);
+        const { data: terms, error } = await supabase
+            .from('terms')
+            .select('*')
+            .order('date', { ascending: false });
+
+        if (error) throw error;
+        return NextResponse.json(terms);
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
 
-// POST: Tambah S&K baru dengan konten langsung
+// POST: Tambah S&K baru ke Supabase
 export async function POST(request) {
     try {
         const data = await request.formData();
@@ -25,48 +26,39 @@ export async function POST(request) {
         let content = data.get('content') || '';
         const file = data.get('file');
 
-        // Jika ada file HTML yang diupload, baca isinya sebagai content
+        // Jika ada file HTML yang diupload
         if (file && file.size > 0) {
             const buffer = await file.arrayBuffer();
             content = new TextDecoder().decode(buffer);
         }
 
-        // Validasi pembaharuan
-        if (!title || title.trim().length < 3) {
-            return NextResponse.json({ error: "Judul minimal 3 karakter" }, { status: 400 });
-        }
-
-        if (!revision || revision.trim().length < 1) {
-            return NextResponse.json({ error: "Versi revisi harus diisi" }, { status: 400 });
-        }
-
-        if (!content || content.trim().length < 10) {
-            return NextResponse.json({ error: "Konten S&K minimal 10 karakter (Pastikan file HTML tidak kosong)" }, { status: 400 });
-        }
-        // Simpan data ke JSON
-        const terms = await readJson('terms.json');
-        const newId = terms.length > 0 ? Math.max(...terms.map(t => t.id)) + 1 : 1;
+        // Validasi
+        if (!title || title.trim().length < 3) return NextResponse.json({ error: "Judul minimal 3 karakter" }, { status: 400 });
+        if (!revision || revision.trim().length < 1) return NextResponse.json({ error: "Versi revisi harus diisi" }, { status: 400 });
+        if (!content || content.trim().length < 10) return NextResponse.json({ error: "Konten S&K minimal 10 karakter" }, { status: 400 });
 
         const dateVal = data.get('date');
         const finalDate = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
 
-        const newTerm = {
-            id: newId,
-            title: title.trim(),
-            slug: title.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
-            revision: revision.trim(),
-            url: urlTarget,
-            content: content.trim(),
-            isActive: true,
-            date: finalDate
-        };
+        const { data: newTerm, error } = await supabase
+            .from('terms')
+            .insert([{
+                title: title.trim(),
+                slug: title.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
+                revision: revision.trim(),
+                url: urlTarget,
+                content: content.trim(),
+                "isActive": true,
+                date: finalDate
+            }])
+            .select()
+            .single();
 
-        terms.push(newTerm);
-        await writeJson('terms.json', terms);
+        if (error) throw error;
 
         return NextResponse.json({
             message: "S&K berhasil disimpan",
-            id: newId
+            id: newTerm.id
         });
 
     } catch (error) {
@@ -74,4 +66,3 @@ export async function POST(request) {
         return NextResponse.json({ error: "Gagal menyimpan data: " + error.message }, { status: 500 });
     }
 }
-
