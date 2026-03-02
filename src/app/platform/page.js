@@ -56,8 +56,8 @@ export default function PlatformPage() {
                     <div className="promo-badge-container">
                         <span className="promo-main-tag">🔥 PROMO SPESIAL 2026</span>
                         <p className="promo-desc">
-                            <strong>Gratis Jan-Mar 2026</strong>, lalu Diskon 50% s/d Desember. <br />
-                            <small>*Hanya untuk pendaftaran sebelum 1 April 2026</small>
+                            <strong>Free 3 bulan iuran pertama khusus di tahun 2026</strong>, lalu Diskon 50% s/d Desember. <br />
+                            <small>*Hanya bagi pendaftaran di tahun 2026</small>
                         </p>
                     </div>
                 </div>
@@ -232,8 +232,7 @@ function PricingCard({ title, subtitle, desc, icon, benefits, color, basePrice, 
             </p>
 
             {/* --- POSISI BARU: BADGE DISINI --- */}
-            {/* Menggunakan margin-left: auto di CSS akan membuatnya rata kanan */}
-            <div className="card-badge-free">FREE JAN-MAR</div>
+            <div className="card-badge-free">Free 3 bulan iuran pertama khusus di tahun 2026</div>
 
             {/* Bagian Harga */}
             <div className="price-section">
@@ -246,7 +245,7 @@ function PricingCard({ title, subtitle, desc, icon, benefits, color, basePrice, 
                 {/* Baris Harga Promo */}
                 <div className="price-row-promo">
                     <p className="price-promo-label">
-                        Promo Apr-Des 2026:
+                        Promo Menarik Khusus 2026:
                     </p>
                     <div className="price-promo-val-group">
                         <span className="price-promo-value">{effectivePrice}</span>

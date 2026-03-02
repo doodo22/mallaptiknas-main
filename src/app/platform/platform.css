@@ -1,364 +1,650 @@
-/* src/app/platform/platform.css */
+/* ============================================================
+   PLATFORM PAGE — PROFESSIONAL REDESIGN
+   Theme: Principal=Green | Distributor+MD=Blue | Mitra=Red
+   ============================================================ */
 
-/* --- HERO SECTION: OVERLAY SYSTEM (COMPLETE) --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ─── CSS CUSTOM PROPERTIES ─────────────────────────────── */
+.platform-page {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─── HERO SECTION ──────────────────────────────────────── */
 .platform-hero {
     position: relative;
-    background-color: var(--brand-navy);
+    background: linear-gradient(135deg, #020b18 0%, #071a35 40%, #0a2347 100%);
     color: #fff;
-    min-height: 60vh;
+    min-height: 72vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 7rem 1rem;
+    padding: 8rem 1.5rem 6rem;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Decorative background grid */
+.platform-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+    z-index: 0;
+}
+
+/* Glow orb behind content */
+.platform-hero::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(ellipse, rgba(0, 174, 239, 0.18) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Background decorative shapes */
+.hero-bg-shapes {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
     overflow: hidden;
 }
 
-/* 1. LAYER TEKS (Static - Center) */
+.hero-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.15;
+}
+
+.hero-shape.shape-1 {
+    width: 500px;
+    height: 500px;
+    background: var(--brand-green, #22c55e);
+    top: -180px;
+    right: -100px;
+}
+
+.hero-shape.shape-2 {
+    width: 400px;
+    height: 400px;
+    background: var(--brand-blue, #00AEEF);
+    bottom: -150px;
+    left: -80px;
+}
+
+/* ─── HERO CENTER STACK ─────────────────────────────────── */
 .hero-center-stack {
     position: relative;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    max-width: 600px;
+    max-width: 680px;
     width: 100%;
-    z-index: 10;
-    /* Di bawah gambar (jika gambar overlay) */
+    animation: fadeInUp 0.7s ease both;
 }
 
-/* Styling Identitas */
 .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    padding: 5px 12px;
+    backdrop-filter: blur(10px);
+    padding: 6px 16px;
     border-radius: 50px;
-    margin-bottom: 1rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #e2e8f0;
+    margin-bottom: 1.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94d4ff;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.hero-logo-wrapper {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
 }
 
 .platform-hero-logo {
-    height: 60px;
-    /* Mobile Size */
+    height: 90px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-    margin-bottom: 0.75rem;
+    filter: drop-shadow(0 8px 24px rgba(0, 174, 239, 0.35));
+    transition: transform 0.4s ease;
+}
+
+.platform-hero-logo:hover {
+    transform: scale(1.05);
 }
 
 .hero-headline {
-    font-size: 1.1rem;
-    /* Mobile Size */
-    font-weight: 800;
-    line-height: 1.3;
-    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 1rem;
     color: #fff;
     text-wrap: balance;
+    letter-spacing: -0.02em;
+}
+
+.hero-headline span {
+    background: linear-gradient(135deg, #60efff, #0061ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .hero-subheadline {
-    font-size: 0.8rem;
-    color: #cbd5e1;
-    line-height: 1.5;
-    max-width: 90%;
-    margin-bottom: -5rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    max-width: 480px;
 }
 
-/* 2. LAYER GAMBAR (Absolute - Overlay) */
+/* Hero floating promo image */
 .hero-abs-image-layer {
     position: absolute;
     top: 50%;
-    left: 50%;
-    z-index: 50;
-    /* Di atas segalanya */
+    right: 4%;
+    transform: translateY(-50%);
+    z-index: 20;
     pointer-events: none;
-    /* Klik tembus ke bawah (opsional) */
+    animation: floatY 4s ease-in-out infinite;
 }
 
 .promo-img-overlay {
-    width: 120px;
-    /* Default: Mobile Size */
+    width: 140px;
     height: auto;
-    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-    /* === SETUP MOBILE (DEFAULT) === */
-    transform:
-        scale(0.8) translate(-50%, -50%) translate(180, -40)
-        /* Mobile: Geser Kanan Bawah */
-        rotate(-15deg);
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.5));
+    transform: rotate(-12deg);
 }
 
-/* ========================================= */
-/* === SETUP TABLET (iPad / Tab) - BARU === */
-/* ========================================= */
-@media (min-width: 768px) {
-    .platform-hero {
-        min-height: 70vh;
+@keyframes floatY {
+
+    0%,
+    100% {
+        transform: translateY(-50%) rotate(-12deg);
     }
 
-    /* Font & Logo Sedang */
-    .hero-center-stack {
-        max-width: 700px;
+    50% {
+        transform: translateY(calc(-50% - 12px)) rotate(-12deg);
+    }
+}
+
+/* ─── RESPONSIVE HERO ───────────────────────────────────── */
+@media (min-width: 768px) {
+    .platform-hero {
+        min-height: 78vh;
     }
 
     .platform-hero-logo {
-        height: 100px;
+        height: 130px;
     }
 
     .hero-headline {
-        font-size: 1.75rem;
+        font-size: 2rem;
     }
 
     .hero-subheadline {
-        font-size: 1rem;
+        font-size: 1.05rem;
     }
 
-    .hero-badge {
-        font-size: 0.8rem;
-    }
-
-    /* Gambar Tablet */
     .promo-img-overlay {
-        width: 280px;
-        /* Ukuran Medium */
-
-        /* ATUR POSISI TABLET DISINI */
-        transform:
-            scale(0.5) translate(-50%, -50%)
-            /* Reset Center */
-            translate(350, -100)
-            /* Geser Kanan 220px, Vertikal Tengah */
-            rotate(-15deg);
+        width: 220px;
     }
 }
 
-/* ========================================= */
-/* === SETUP DESKTOP (Laptop / PC) === */
-/* ========================================= */
 @media (min-width: 1024px) {
     .platform-hero {
-        min-height: 90vh;
+        min-height: 82vh;
     }
 
-    /* Font & Logo Besar */
     .hero-center-stack {
         max-width: 800px;
     }
 
     .platform-hero-logo {
-        height: 140px;
+        height: 160px;
     }
 
     .hero-headline {
-        font-size: 2.5rem;
+        font-size: 2.75rem;
     }
 
     .hero-subheadline {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
     }
 
-    /* Gambar Desktop */
     .promo-img-overlay {
-        width: 450px;
-        /* Ukuran Besar */
-
-        /* ATUR POSISI DESKTOP DISINI */
-        transform:
-            scale(0.5) translate(-50%, -50%) translate(400, -350)
-            /* Geser Kanan Jauh */
-            rotate(-15deg);
+        width: 310px;
     }
 }
 
-/* --- PRICING SECTION --- */
+/* ─── PRICING SECTION ───────────────────────────────────── */
 .section-wrapper {
-    padding: 5rem 1rem;
+    padding: 6rem 1.5rem;
+    background: #f0f4f8;
+    position: relative;
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 3.5rem;
+    animation: fadeInUp 0.5s ease both;
 }
 
 .section-title {
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: var(--brand-navy);
-    margin-bottom: 1rem;
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: var(--brand-navy, #0a2347);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.03em;
 }
 
+/* ─── PROMO BADGE ────────────────────────────────────────── */
+.promo-badge-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.promo-main-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
+    color: #fff;
+    padding: 0.55rem 1.75rem;
+    border-radius: 99px;
+    font-weight: 800;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 8px 24px rgba(225, 29, 72, 0.35);
+    animation: pulseBadge 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseBadge {
+
+    0%,
+    100% {
+        box-shadow: 0 8px 24px rgba(225, 29, 72, 0.35);
+    }
+
+    50% {
+        box-shadow: 0 8px 36px rgba(225, 29, 72, 0.6);
+    }
+}
+
+.promo-desc {
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    text-align: center;
+}
+
+/* ─── SECTION LABELS (B2B / RETAIL) ─────────────────────── */
+.tier-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+    margin: 0 auto 1.25rem;
+    max-width: 1240px;
+    padding: 0 0.5rem;
+}
+
+.tier-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+/* ─── PRICING GRID ──────────────────────────────────────── */
 .pricing-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.25rem;
-    max-width: 1280px;
+    max-width: 1240px;
     margin: 0 auto;
-    padding: 0 0.5rem;
+    padding: 0 0.25rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
     .pricing-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (min-width: 1024px) {
-    .pricing-grid {
+    .pricing-grid.six-cols {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-/* Card Styling */
+/* ─── PRICING CARD ──────────────────────────────────────── */
 .pricing-card {
     position: relative;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.875rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    background: #ffffff;
+    border: 1px solid #e8eef4;
+    border-radius: 1.25rem;
+    padding: 1.75rem 1.5rem 1.5rem;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.04),
+        0 8px 24px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 }
 
 .pricing-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px);
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.04),
+        0 20px 48px rgba(0, 0, 0, 0.12);
+    border-color: var(--theme-color);
 }
 
+/* Colored top accent bar */
 .card-top-line {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background-color: var(--theme-color);
+    height: 5px;
+    background: linear-gradient(90deg, var(--theme-color), color-mix(in srgb, var(--theme-color), #fff 30%));
+    border-radius: 1.25rem 1.25rem 0 0;
 }
 
-/* src/app/platform/platform.css */
-
-/* ... kode sebelumnya ... */
-
-/* --- UPDATE BADGE POSITION --- */
-.card-badge-free {
-    /* Reset posisi absolute lama */
-    position: static;
-
-    /* Layout & Spacing */
-    display: inline-block;
-    margin-left: auto;
-    /* Trik CSS: Dorong badge mentok ke kanan */
-    margin-bottom: 0.5rem;
-    /* Beri sedikit jarak dengan kotak harga di bawahnya */
-
-    /* Styling Visual */
-    background: #e0f2fe;
-    /* Sky-100 (Biru muda lembut) */
-    color: var(--brand-blue);
-    font-size: 0.7rem;
-    font-weight: 800;
-    padding: 0.35rem 0.85rem;
-    border-radius: 99px;
-    /* Bentuk Pill */
-    border: 1px solid #bae6fd;
-    /* Border halus */
-    letter-spacing: 0.05em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+/* Subtle branded glow at the top */
+.pricing-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--theme-color), transparent 92%), transparent);
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* Opsional: Tambahkan animasi kecil agar menarik perhatian */
-.pricing-card:hover .card-badge-free {
-    transform: translateY(-2px);
-    transition: transform 0.3s ease;
-}
-
-.card-icon {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 1rem;
+/* ─── CARD HEADER ────────────────────────────────────────── */
+.card-header-group {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    /* Menggunakan color-mix untuk transparansi dinamis berbasis variabel */
-    background-color: color-mix(in srgb, var(--theme-color), transparent 90%);
-    color: var(--theme-color);
-}
-
-.card-price-strike {
-    text-decoration: line-through;
-    color: #94a3b8;
-    font-weight: 700;
-    font-size: 1.125rem;
-}
-
-.card-price-main {
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: var(--brand-blue);
-    /* Bisa diubah jadi theme-color jika mau */
-}
-
-.card-benefits-title {
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--brand-navy);
+    gap: 1rem;
     margin-bottom: 1rem;
 }
 
+.card-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--theme-color), transparent 88%);
+    color: var(--theme-color);
+    border: 1px solid color-mix(in srgb, var(--theme-color), transparent 75%);
+    transition: background 0.3s ease;
+}
+
+.pricing-card:hover .card-icon {
+    background: color-mix(in srgb, var(--theme-color), transparent 80%);
+}
+
+.card-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.card-subtitle {
+    color: #64748b;
+    font-size: 0.72rem;
+    font-weight: 500;
+    margin: 3px 0 0 0;
+    line-height: 1.3;
+}
+
+/* ─── CARD DESCRIPTION ───────────────────────────────────── */
+.card-desc {
+    position: relative;
+    z-index: 1;
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    min-height: 52px;
+}
+
+/* ─── FREE BADGE ─────────────────────────────────────────── */
+.card-badge-free {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: color-mix(in srgb, var(--theme-color), transparent 88%);
+    color: var(--theme-color);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.3rem 0.85rem;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--theme-color), transparent 70%);
+    letter-spacing: 0.03em;
+    margin-bottom: 1rem;
+    max-width: 100%;
+}
+
+.card-badge-free::before {
+    content: '★';
+    font-size: 0.6rem;
+    opacity: 0.8;
+}
+
+/* ─── PRICE SECTION ──────────────────────────────────────── */
+.price-section {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    padding: 1rem 1.1rem;
+    border-radius: 0.875rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #e2e8f0;
+    min-height: 108px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Normal price row */
+.price-row-base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e8eef4;
+}
+
+.price-label-sm {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.price-strike {
+    text-decoration: line-through;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+/* Promo price row */
+.price-row-promo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+}
+
+.price-promo-label {
+    font-size: 0.66rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+
+.price-promo-val-group {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.price-promo-value {
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: var(--theme-color);
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.price-promo-suffix {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.price-note {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    margin-top: 5px;
+    font-style: italic;
+    line-height: 1.35;
+}
+
+/* ─── BENEFITS LIST ──────────────────────────────────────── */
+.card-benefits-title {
+    position: relative;
+    z-index: 1;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+}
+
 .benefit-item {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.95rem;
-    color: #475569;
+    gap: 0.6rem;
+    margin-bottom: 0.55rem;
+    font-size: 0.8rem;
+    color: #334155;
+    line-height: 1.45;
 }
 
 .benefit-check {
-    color: var(--brand-green);
-    flex-shrink: 0;
-    margin-top: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--theme-color), transparent 85%);
+    color: var(--theme-color);
+    font-size: 0.6rem;
+    font-weight: 900;
+    margin-top: 1px;
 }
 
+/* ─── CTA BUTTON ─────────────────────────────────────────── */
 .btn-card-action {
+    position: relative;
+    z-index: 1;
+    display: block;
     width: 100%;
-    padding: 0.875rem;
+    padding: 0.8rem 1rem;
     border-radius: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 0.85rem;
     color: #fff;
-    background-color: var(--theme-color);
+    background: linear-gradient(135deg, var(--theme-color), color-mix(in srgb, var(--theme-color), #000 15%));
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 2rem;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    margin-top: auto;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--theme-color), transparent 65%);
 }
 
 .btn-card-action:hover {
-    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px color-mix(in srgb, var(--theme-color), transparent 50%);
+    filter: brightness(1.08);
 }
 
-/* --- DOCS SECTION --- */
+.btn-card-action:active {
+    transform: translateY(0);
+}
+
+/* ─── DOCS SECTION ───────────────────────────────────────── */
 .docs-section {
-    background-color: var(--bg-light);
-    padding: 5rem 1rem;
+    background: #fff;
+    padding: 5.5rem 1.5rem;
 }
 
 .doc-cards-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    max-width: 1024px;
+    gap: 1.25rem;
+    max-width: 900px;
     margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
     .doc-cards-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -372,478 +658,90 @@
     display: flex;
     gap: 1.25rem;
     align-items: flex-start;
-    transition: box-shadow 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .doc-card:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+    transform: translateY(-3px);
+    border-color: var(--brand-blue, #00AEEF);
 }
 
 .doc-icon {
-    width: 3.5rem;
-    height: 3.5rem;
-    background: rgba(0, 174, 239, 0.1);
-    /* brand-blue 10% */
-    color: var(--brand-blue);
+    width: 3.25rem;
+    height: 3.25rem;
+    min-width: 3.25rem;
+    background: rgba(0, 174, 239, 0.08);
+    color: var(--brand-blue, #00AEEF);
     border-radius: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    border: 1px solid rgba(0, 174, 239, 0.15);
 }
 
+/* ─── CTA BANNER ─────────────────────────────────────────── */
 .cta-banner {
-    background: linear-gradient(to right, var(--brand-navy), var(--brand-blue));
-    border-radius: 1rem;
-    padding: 2.5rem;
+    background: linear-gradient(135deg, var(--brand-navy, #0a2347), var(--brand-blue, #00AEEF));
+    border-radius: 1.25rem;
+    padding: 3rem 2rem;
     text-align: center;
     color: #fff;
     margin-top: 3rem;
-    max-width: 1024px;
+    max-width: 900px;
     margin-left: auto;
     margin-right: auto;
+    box-shadow: 0 16px 48px rgba(0, 35, 71, 0.25);
 }
 
 .cta-banner button {
     background: #fff;
-    color: var(--brand-blue);
+    color: var(--brand-blue, #00AEEF);
     font-weight: 700;
-    padding: 0.75rem 2rem;
-    border-radius: 0.5rem;
+    padding: 0.875rem 2.25rem;
+    border-radius: 0.75rem;
     margin-top: 1.5rem;
-    transition: background 0.2s;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
 }
 
 .cta-banner button:hover {
-    background: #f8fafc;
+    background: #f0f9ff;
+    transform: translateY(-2px);
 }
 
-/* --- TAMBAHAN STYLE LOGO BARU --- */
-.hero-logo-wrapper {
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: center;
+/* ─── ANIMATIONS ─────────────────────────────────────────── */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.platform-hero-logo {
-    height: 180px;
-    /* Ukuran default untuk Mobile */
-    width: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
-    /* Memberikan efek depth/bayangan halus */
-    transition: transform 0.3s ease;
+.animate-fade-in-up {
+    animation: fadeInUp 0.65s ease both;
 }
 
-.platform-hero-logo:hover {
-    transform: scale(1.05);
-    /* Sedikit efek interaktif saat di-hover */
-}
-
-/* Responsif untuk Tablet & Desktop */
+/* ─── RESPONSIVE HELPERS ─────────────────────────────────── */
 @media (min-width: 768px) {
-    .platform-hero-logo {
-        height: 300px;
-        /* Ukuran lebih besar di layar lebar */
+    .section-title {
+        font-size: 2.25rem;
     }
 }
 
-/* Header Promo Style */
-.promo-badge-container {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.promo-main-tag {
-    background: #e11d48;
-    /* Rose-600 */
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border-radius: 99px;
-    font-weight: 800;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
-    animation: pulse 2s infinite;
-}
-
-.promo-desc {
-    color: var(--brand-grey);
-    font-size: 1rem;
-    line-height: 1.4;
-}
-
-/* Grid System Update untuk 4 Kolom */
-.pricing-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    /* Mobile: 1 kolom */
-    gap: 1.5rem;
-    max-width: 1400px;
-    /* Lebar max diperbesar agar 4 kartu muat */
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-/* Tablet: 2 Kolom */
-@media (min-width: 768px) {
-    .pricing-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Desktop Besar: 3 Kolom per Baris (Total 6 Item dalam 2 Baris) */
-@media (min-width: 1200px) {
-    .pricing-grid.six-cols {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Card Updates */
-.card-header-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-}
-
-.pricing-card .card-icon {
-    width: 3.25rem;
-    /* Icon sedikit diperkecil agar header muat */
-    height: 3.25rem;
-    margin-bottom: 0;
-    /* Margin dihapus karena sudah di-handle flex gap */
-}
-
-/* Animasi Pulse untuk Promo */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
+@media (max-width: 480px) {
+    .pricing-card {
+        padding: 1.5rem 1.25rem 1.25rem;
     }
 
-    50% {
-        transform: scale(1.05);
+    .price-promo-value {
+        font-size: 1.4rem;
     }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-/* --- PRICE TYPOGRAPHY SYSTEM --- */
-/* src/app/platform/platform.css */
-
-/* ... kode sebelumnya ... */
-
-/* --- PRICE SECTION UNIFORMITY (PERBAIKAN) --- */
-.price-section {
-    background: #f8fafc;
-    padding: 1.25rem 1rem;
-    /* Padding atas-bawah sedikit ditambah agar lega */
-    border-radius: 0.75rem;
-    margin-bottom: 1.25rem;
-    border: 1px dashed #cbd5e1;
-
-    /* KUNCI PERBAIKAN: */
-    min-height: 140px;
-    /* Menetapkan tinggi minimum agar seragam dengan kartu tertinggi */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    /* Membuat jarak antara harga normal dan promo terdistribusi rapi */
-}
-
-/* Baris Harga Normal */
-.price-row-base {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px dashed #e2e8f0;
-    /* Opsional: Garis pemisah tipis */
-}
-
-.price-label-sm {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    font-weight: 500;
-}
-
-.price-strike {
-    text-decoration: line-through;
-    color: #94a3b8;
-    font-weight: 700;
-    /* Ditebalkan sedikit agar terbaca */
-    font-size: 0.9rem;
-}
-
-/* Baris Harga Promo */
-.price-row-promo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* Konten promo rata tengah secara vertikal di sisa ruang */
-    flex: 1;
-    /* Mengambil sisa ruang yang ada */
-}
-
-.price-promo-label {
-    font-size: 0.7rem;
-    color: var(--brand-navy);
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-    letter-spacing: 0.05em;
-}
-
-.price-promo-val-group {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-.price-promo-value {
-    font-size: 1.5rem;
-    /* Ukuran standar yang terbaca jelas */
-    font-weight: 900;
-    color: var(--theme-color);
-    line-height: 1;
-}
-
-.price-promo-suffix {
-    color: #64748b;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-/* Note (Untuk Tier 1, 2, 3) */
-.price-note {
-    font-size: 0.7rem;
-    color: #64748b;
-    margin-top: 6px;
-    font-style: italic;
-    line-height: 1.3;
-}
-
-/* src/app/platform/platform.css */
-
-/* ... (Kode sebelumnya tetap sama sampai Pricing Section) ... */
-
-/* --- PRICING SECTION UPDATES --- */
-
-/* Rapikan Container Grid */
-.pricing-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    /* Gap diperkecil dari 1.25rem/1.5rem agar lebih rapat */
-    max-width: 1200px;
-    /* Max-width dikunci agar tidak terlalu lebar di layar besar */
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-@media (min-width: 768px) {
-    .pricing-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1200px) {
-    .pricing-grid.four-cols {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* Card Styling - Diperkecil (Compact) */
-.pricing-card {
-    position: relative;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
-    /* Radius sedikit dikurangi */
-    padding: 1.25rem;
-    /* Padding dikurangi dari 1.5rem agar lebih compact */
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.pricing-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
-    border-color: var(--theme-color);
-}
-
-/* Header Group Compact */
-.card-header-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.pricing-card .card-icon {
-    width: 2.75rem;
-    /* Icon diperkecil */
-    height: 2.75rem;
-    border-radius: 0.6rem;
-    margin-bottom: 0;
-    flex-shrink: 0;
-}
-
-.pricing-card .card-icon svg {
-    width: 20px;
-    height: 20px;
-}
-
-/* Typography Judul Kartu */
-.card-title {
-    font-size: 1.15rem;
-    /* Ukuran font judul diseragamkan */
-    font-weight: 800;
-    color: var(--brand-navy);
-    margin: 0;
-    line-height: 1.2;
-}
-
-.card-subtitle {
-    color: #64748b;
-    font-size: 0.75rem;
-    /* Subtitle diperkecil */
-    margin: 2px 0 0 0;
-    line-height: 1.3;
-}
-
-/* Deskripsi Singkat */
-.card-desc {
-    font-size: 0.85rem;
-    color: #475569;
-    line-height: 1.5;
-    margin-bottom: 1.25rem;
-    min-height: 50px;
-    /* Tinggi minimum dikurangi */
-}
-
-/* --- PRICE SECTION UNIFORMITY --- */
-.price-section {
-    background: #f8fafc;
-    padding: 1rem;
-    /* Padding dalam box harga */
-    border-radius: 0.5rem;
-    margin-bottom: 1.25rem;
-    border: 1px dashed #cbd5e1;
-}
-
-/* Baris Harga Normal */
-.price-row-base {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.price-label-sm {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    font-weight: 500;
-}
-
-.price-strike {
-    text-decoration: line-through;
-    color: #94a3b8;
-    font-weight: 600;
-    font-size: 0.85rem;
-    /* Ukuran fixed agar seragam */
-}
-
-/* Baris Harga Promo */
-.price-row-promo {
-    display: flex;
-    flex-direction: column;
-}
-
-.price-promo-label {
-    font-size: 0.7rem;
-    color: var(--brand-navy);
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-bottom: 2px;
-}
-
-.price-promo-val-group {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-.price-promo-value {
-    font-size: 1.35rem;
-    /* Tidak terlalu besar, pas & seragam */
-    font-weight: 800;
-    color: var(--theme-color);
-    line-height: 1;
-}
-
-.price-promo-suffix {
-    color: #64748b;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
-.price-note {
-    font-size: 0.7rem;
-    color: #64748b;
-    margin-top: 4px;
-    font-style: italic;
-}
-
-/* Benefits List Compact */
-.card-benefits-title {
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: var(--brand-navy);
-    margin-bottom: 0.75rem;
-}
-
-.benefit-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    /* Jarak antar list diperkecil */
-    font-size: 0.8rem;
-    /* Font list diperkecil */
-    color: #475569;
-    line-height: 1.4;
-}
-
-/* Button Compact */
-.btn-card-action {
-    width: 100%;
-    padding: 0.75rem;
-    /* Padding tombol sedikit dikurangi */
-    border-radius: 0.5rem;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: #fff;
-    background-color: var(--theme-color);
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: auto;
-    /* Push tombol ke bawah container flex */
-}
-
-.btn-card-action:hover {
-    filter: brightness(110%);
-    transform: translateY(-1px);
 }
