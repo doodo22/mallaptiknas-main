@@ -1,10 +1,30 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
-import { writeFile } from 'fs/promises';
-import path from 'path';
-import fs from 'fs';
 
-// GET: Ambil semua artikel dari Supabase
+// ─── HELPER: Upload gambar ke Supabase Storage ───────────────
+async function uploadImageToSupabase(file) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '-');
+    const filename = `${Date.now()}-${safeName}`;
+
+    const { data, error } = await supabase.storage
+        .from('blog-images')          // nama bucket di Supabase Storage
+        .upload(`uploads/${filename}`, buffer, {
+            contentType: file.type,
+            upsert: false,
+        });
+
+    if (error) throw new Error('Upload gambar gagal: ' + error.message);
+
+    // Ambil public URL
+    const { data: urlData } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(`uploads/${filename}`);
+
+    return urlData.publicUrl;
+}
+
+// ─── GET: Ambil semua artikel ────────────────────────────────
 export async function GET() {
     try {
         const { data: posts, error } = await supabase
@@ -23,14 +43,12 @@ export async function GET() {
     }
 }
 
-// POST: Tambah artikel baru ke Supabase
+// ─── POST: Tambah artikel baru ───────────────────────────────
 export async function POST(request) {
     try {
-        console.log('=== API BLOG POST CALLED (SUPABASE) ===');
+        console.log('=== API BLOG POST (SUPABASE STORAGE) ===');
 
-        // Cek content-type
         const contentType = request.headers.get('content-type') || '';
-
         if (!contentType.includes('multipart/form-data') && !contentType.includes('application/x-www-form-urlencoded')) {
             return NextResponse.json({
                 success: false,
@@ -47,25 +65,19 @@ export async function POST(request) {
         const youtubeUrl = data.get('youtubeUrl');
 
         // Validasi input
-        if (!title || title.trim().length < 3) return NextResponse.json({ success: false, error: "Judul minimal 3 karakter" }, { status: 400 });
-        if (!category || category.trim().length < 2) return NextResponse.json({ success: false, error: "Kategori wajib diisi" }, { status: 400 });
-        if (!author || author.trim().length < 2) return NextResponse.json({ success: false, error: "Penulis wajib diisi" }, { status: 400 });
-        if (!content || content.trim().length < 10) return NextResponse.json({ success: false, error: "Konten minimal 10 karakter" }, { status: 400 });
+        if (!title || title.trim().length < 3)
+            return NextResponse.json({ success: false, error: "Judul minimal 3 karakter" }, { status: 400 });
+        if (!category || category.trim().length < 2)
+            return NextResponse.json({ success: false, error: "Kategori wajib diisi" }, { status: 400 });
+        if (!author || author.trim().length < 2)
+            return NextResponse.json({ success: false, error: "Penulis wajib diisi" }, { status: 400 });
+        if (!content || content.trim().length < 10)
+            return NextResponse.json({ success: false, error: "Konten minimal 10 karakter" }, { status: 400 });
 
-        let imageUrl = '';
-
+        // Upload gambar ke Supabase Storage (bukan filesystem)
+        let imageUrl = 'https://via.placeholder.com/600x400';
         if (file && file.size > 0) {
-            // NOTE: Local upload ini bersifat sementara di Vercel. 
-            // Disarankan migrasi ke Supabase Storage nanti.
-            const buffer = Buffer.from(await file.arrayBuffer());
-            const uploadDir = path.join(process.cwd(), 'public/uploads');
-            if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-            const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '-')}`;
-            const filePath = path.join(uploadDir, filename);
-            await writeFile(filePath, buffer);
-            imageUrl = `/uploads/${filename}`;
-        } else {
-            imageUrl = 'https://via.placeholder.com/600x400';
+            imageUrl = await uploadImageToSupabase(file);
         }
 
         const { data: newPost, error } = await supabase

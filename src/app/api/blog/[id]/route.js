@@ -1,10 +1,30 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
-import { writeFile } from 'fs/promises';
-import path from 'path';
-import fs from 'fs';
 
-// GET: Ambil Detail Artikel dari Supabase
+// ─── HELPER: Upload gambar ke Supabase Storage ───────────────
+async function uploadImageToSupabase(file) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '-');
+    const filename = `${Date.now()}-${safeName}`;
+
+    const { data, error } = await supabase.storage
+        .from('blog-images')          // nama bucket di Supabase Storage
+        .upload(`uploads/${filename}`, buffer, {
+            contentType: file.type,
+            upsert: false,
+        });
+
+    if (error) throw new Error('Upload gambar gagal: ' + error.message);
+
+    // Ambil public URL
+    const { data: urlData } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(`uploads/${filename}`);
+
+    return urlData.publicUrl;
+}
+
+// ─── GET: Ambil Detail Artikel ───────────────────────────────
 export async function GET(request, { params }) {
     try {
         const { id } = await params;
@@ -21,19 +41,13 @@ export async function GET(request, { params }) {
             }, { status: 404 });
         }
 
-        return NextResponse.json({
-            success: true,
-            data: post
-        });
+        return NextResponse.json({ success: true, data: post });
     } catch (error) {
-        return NextResponse.json({
-            success: false,
-            error: error.message
-        }, { status: 500 });
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
 
-// PUT: Update Artikel di Supabase
+// ─── PUT: Update Artikel ─────────────────────────────────────
 export async function PUT(request, { params }) {
     try {
         const { id } = await params;
@@ -46,18 +60,14 @@ export async function PUT(request, { params }) {
         const youtubeUrl = data.get('youtubeUrl');
         const file = data.get('imageFile');
 
-        // Validasi input
-        if (title && title.trim().length < 3) return NextResponse.json({ success: false, error: "Judul minimal 3 karakter" }, { status: 400 });
+        // Validasi
+        if (title && title.trim().length < 3)
+            return NextResponse.json({ success: false, error: "Judul minimal 3 karakter" }, { status: 400 });
 
+        // Upload gambar ke Supabase Storage jika ada file baru
         let imageUrl = null;
         if (file && typeof file !== 'string' && file.size > 0) {
-            const buffer = Buffer.from(await file.arrayBuffer());
-            const uploadDir = path.join(process.cwd(), 'public/uploads');
-            if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-            const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '-')}`;
-            const filePath = path.join(uploadDir, filename);
-            await writeFile(filePath, buffer);
-            imageUrl = `/uploads/${filename}`;
+            imageUrl = await uploadImageToSupabase(file);
         }
 
         const updateData = {};
@@ -92,7 +102,7 @@ export async function PUT(request, { params }) {
     }
 }
 
-// DELETE: Hapus artikel dari Supabase
+// ─── DELETE: Hapus Artikel ───────────────────────────────────
 export async function DELETE(request, { params }) {
     try {
         const { id } = await params;
@@ -103,14 +113,8 @@ export async function DELETE(request, { params }) {
 
         if (error) throw error;
 
-        return NextResponse.json({
-            success: true,
-            message: "Artikel berhasil dihapus"
-        });
+        return NextResponse.json({ success: true, message: "Artikel berhasil dihapus" });
     } catch (error) {
-        return NextResponse.json({
-            success: false,
-            error: error.message
-        }, { status: 500 });
+        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
