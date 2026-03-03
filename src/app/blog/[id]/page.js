@@ -1,46 +1,59 @@
 // src/app/blog/[id]/page.js
-import { readJson } from '@/lib/jsonDb';
+import { supabase } from '@/lib/supabase';
 import Link from "next/link";
 import { notFound } from 'next/navigation';
 import "../blog-detail.css";
 
-// 1. Generate Metadata untuk SEO
-export async function generateMetadata({ params }) {
-    const { id } = await params;
-    const posts = await readJson('posts.json');
-    const post = posts.find(p => p.id === parseInt(id));
-
-    if (!post) return { title: 'Artikel Tidak Ditemukan' };
-
-    return {
-        title: `${post.title} - Mall APTIKNAS Blog`,
-        description: post.content.substring(0, 160) + '...',
-    };
-}
-
-// Helper: Ambil data post
+// ─── Helper: Ambil data post dari Supabase ───────────────────
 async function getPost(id) {
-    const posts = await readJson('posts.json');
-    return posts.find(p => p.id === parseInt(id));
+    const { data: post, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('id', parseInt(id))
+        .single();
+
+    if (error || !post) return null;
+    return post;
 }
 
-// Helper: Ambil related posts
+// ─── Helper: Ambil related posts dari Supabase ───────────────
 async function getRelatedPosts(currentId) {
-    const posts = await readJson('posts.json');
-    return posts
-        .filter(p => p.id !== parseInt(currentId))
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        .slice(0, 3);
+    const { data: posts, error } = await supabase
+        .from('posts')
+        .select('id, title, image, created_at, category')
+        .neq('id', parseInt(currentId))
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+    if (error) return [];
+    return posts || [];
 }
 
-// Helper: Youtube ID
+// ─── Helper: Youtube ID ──────────────────────────────────────
 function getYoutubeId(url) {
     if (!url) return null;
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
     return match ? match[1] : null;
 }
 
-// 2. Main Server Component
+// ─── SEO Metadata ────────────────────────────────────────────
+export async function generateMetadata({ params }) {
+    const { id } = await params;
+    const post = await getPost(id);
+
+    if (!post) return { title: 'Artikel Tidak Ditemukan' };
+
+    return {
+        title: `${post.title} - Mall APTIKNAS Blog`,
+        description: post.content?.substring(0, 160) + '...',
+        openGraph: {
+            title: post.title,
+            images: post.image ? [post.image] : [],
+        }
+    };
+}
+
+// ─── Main Page Component ─────────────────────────────────────
 export default async function BlogDetailPage({ params }) {
     const { id } = await params;
     const post = await getPost(id);
@@ -50,7 +63,6 @@ export default async function BlogDetailPage({ params }) {
     const relatedPosts = await getRelatedPosts(id);
     const youtubeId = getYoutubeId(post.youtubeUrl);
 
-    // Format tanggal
     const formattedDate = new Date(post.created_at).toLocaleDateString("id-ID", {
         day: "numeric", month: "long", year: "numeric",
     });
@@ -90,7 +102,7 @@ export default async function BlogDetailPage({ params }) {
                 <div className="grid lg:grid-cols-12 gap-12 mt-16">
                     <article className="lg:col-span-8">
                         <div className="prose-modern">
-                            {post.content.split("\n").map(p => p.trim()).filter(Boolean).map((p, i) => (
+                            {post.content?.split("\n").map(p => p.trim()).filter(Boolean).map((p, i) => (
                                 <p key={i}>{p}</p>
                             ))}
                         </div>
