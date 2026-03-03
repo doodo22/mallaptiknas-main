@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase, supabaseAdmin } from '@/lib/supabase';
 
 // ─── HELPER: Upload gambar ke Supabase Storage ───────────────
 async function uploadImageToSupabase(file) {
@@ -7,8 +7,9 @@ async function uploadImageToSupabase(file) {
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '-');
     const filename = `${Date.now()}-${safeName}`;
 
-    const { data, error } = await supabase.storage
-        .from('blog-images')          // nama bucket di Supabase Storage
+    // Gunakan supabaseAdmin (service_role) agar bypass RLS
+    const { data, error } = await supabaseAdmin.storage
+        .from('blog-images')
         .upload(`uploads/${filename}`, buffer, {
             contentType: file.type,
             upsert: false,
@@ -17,7 +18,7 @@ async function uploadImageToSupabase(file) {
     if (error) throw new Error('Upload gambar gagal: ' + error.message);
 
     // Ambil public URL
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseAdmin.storage
         .from('blog-images')
         .getPublicUrl(`uploads/${filename}`);
 
