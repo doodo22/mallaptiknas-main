@@ -39,14 +39,7 @@ export default function PlatformPage() {
                     </p>
                 </div>
 
-                {/* LAYER 2: GAMBAR (Absolute Floating - Di Atas Semuanya) */}
-                <div className="hero-abs-image-layer animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                    <img
-                        src="/img/promo gratis keanggotaan.png"
-                        alt="Promo Gratis"
-                        className="promo-img-overlay"
-                    />
-                </div>
+
             </section>
 
             {/* SECTION 2: PRICING TIERS */}

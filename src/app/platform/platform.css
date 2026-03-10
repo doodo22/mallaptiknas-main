@@ -15,11 +15,11 @@
     position: relative;
     background: linear-gradient(135deg, #020b18 0%, #071a35 40%, #0a2347 100%);
     color: #fff;
-    min-height: 72vh;
+    min-height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 8rem 1.5rem 6rem;
+    padding: 7rem 1.5rem 5rem;
     overflow: hidden;
     isolation: isolate;
 }
@@ -187,7 +187,7 @@
 /* ─── RESPONSIVE HERO ───────────────────────────────────── */
 @media (min-width: 768px) {
     .platform-hero {
-        min-height: 78vh;
+        min-height: auto;
     }
 
     .platform-hero-logo {
@@ -209,7 +209,7 @@
 
 @media (min-width: 1024px) {
     .platform-hero {
-        min-height: 82vh;
+        min-height: auto;
     }
 
     .hero-center-stack {
