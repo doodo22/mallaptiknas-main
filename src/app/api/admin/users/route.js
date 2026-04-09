@@ -34,9 +34,20 @@ export async function POST(request) {
 
         if (existing) return NextResponse.json({ success: false, error: "Username sudah digunakan" }, { status: 400 });
 
+        // Ambil ID tertinggi saat ini untuk mencegah error duplicate key sequence
+        const { data: maxIdData } = await supabase
+            .from('users')
+            .select('id')
+            .order('id', { ascending: false })
+            .limit(1)
+            .single();
+            
+        const nextId = maxIdData ? maxIdData.id + 1 : 1;
+
         const { data: newUser, error } = await supabase
             .from('users')
             .insert([{
+                id: nextId,
                 username: username.trim(),
                 password: password, // TODO: Hash password
                 is_active: 1,

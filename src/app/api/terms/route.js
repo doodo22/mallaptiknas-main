@@ -40,9 +40,20 @@ export async function POST(request) {
         const dateVal = data.get('date');
         const finalDate = dateVal ? new Date(dateVal).toISOString() : new Date().toISOString();
 
+        // Ambil ID tertinggi saat ini untuk mencegah error duplicate key sequence
+        const { data: maxIdData } = await supabase
+            .from('terms')
+            .select('id')
+            .order('id', { ascending: false })
+            .limit(1)
+            .single();
+            
+        const nextId = maxIdData ? maxIdData.id + 1 : 1;
+
         const { data: newTerm, error } = await supabase
             .from('terms')
             .insert([{
+                id: nextId,
                 title: title.trim(),
                 slug: title.trim().toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''),
                 revision: revision.trim(),

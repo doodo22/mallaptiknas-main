@@ -81,9 +81,20 @@ export async function POST(request) {
             imageUrl = await uploadImageToSupabase(file);
         }
 
+        // Ambil ID tertinggi saat ini untuk mencegah error duplicate key sequence
+        const { data: maxIdData } = await supabase
+            .from('posts')
+            .select('id')
+            .order('id', { ascending: false })
+            .limit(1)
+            .single();
+            
+        const nextId = maxIdData ? maxIdData.id + 1 : 1;
+
         const { data: newPost, error } = await supabase
             .from('posts')
             .insert([{
+                id: nextId,
                 title: title.trim(),
                 category: category.trim(),
                 author: author.trim(),

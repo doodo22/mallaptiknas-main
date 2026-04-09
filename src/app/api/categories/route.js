@@ -39,9 +39,20 @@ export async function POST(request) {
             );
         }
 
+        // Ambil ID tertinggi saat ini untuk mencegah error duplicate key sequence
+        const { data: maxIdData } = await supabase
+            .from('categories')
+            .select('id')
+            .order('id', { ascending: false })
+            .limit(1)
+            .single();
+            
+        const nextId = maxIdData ? maxIdData.id + 1 : 1;
+
         const { data: newCategory, error } = await supabase
             .from('categories')
             .insert([{
+                id: nextId,
                 name: validatedName,
                 color: color || 'blue'
             }])
