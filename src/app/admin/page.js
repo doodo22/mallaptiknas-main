@@ -1003,7 +1003,7 @@ export default function AdminMainPage() {
                                                 onChange={e => setSearchTerm(e.target.value)}
                                             />
                                         </div>
-                                        <button onClick={() => { /* resetTermForm(); setView("term-form"); */ }} className="btn btn-primary whitespace-nowrap">
+                                        <button onClick={() => { resetTermForm(); setView("term-form"); }} className="btn btn-primary whitespace-nowrap">
                                             <i className="fas fa-plus mr-1 md:mr-2"></i>
                                             <span>Tambah S&K</span>
                                         </button>

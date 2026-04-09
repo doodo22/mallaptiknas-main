@@ -1,4 +1,4 @@
-# Mall APTIKNAS Web Platform
+# Mall APTIKNAS about Web Platform
 
 Platform ekosistem teknologi terintegrasi untuk anggota APTIKNAS, distributor, reseller, dan UMKM.
 
