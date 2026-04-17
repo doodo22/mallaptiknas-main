@@ -29,21 +29,21 @@ const Advertising = () => {
                 <div className="cp-head">
                     <span className="cp-kicker">Marketing Opportunity</span>
                     <h2 className="cp-title">Partnership & <span>Advertising</span></h2>
-                    <p className="cp-sub ad-description">
+                    <p className="cp-sub promo-description">
                         Perkuat eksposur brand Anda melalui ekosistem periklanan terpadu MallAptiknas. Tampilkan produk dan solusi IT Anda langsung kepada:
                     </p>
-                    <ul className="ad-target-list">
+                    <ul className="promo-target-list">
                         <li>Ribuan mitra usaha IT terpercaya</li>
                         <li>Klien korporasi dari sektor pemerintahan dan swasta</li>
                     </ul>
-                    <p className="ad-promo-note">
+                    <p className="promo-note-text">
                         *Paket eksposure di platform MallAptiknas sudah termasuk free konten & eksposure di Instagram, YouTube, dan TikTok MallAptiknas.
                     </p>
                 </div>
 
-                <div className="ad-grid">
+                <div className="promo-grid">
                     {/* INFO HARGA */}
-                    <div className="ad-card price-card">
+                    <div className="promo-card price-card">
                         <div className="badge-promo">PROMO 2026</div>
                         <h3>Investasi Iklan</h3>
                         <div className="price-tag">
@@ -58,7 +58,7 @@ const Advertising = () => {
                     </div>
 
                     {/* CHANNEL LIST */}
-                    <div className="ad-card-list">
+                    <div className="promo-card-list">
                         <h4>Channel Penayangan</h4>
                         <div className="channel-grid">
                             <div className="channel-item">
@@ -102,7 +102,7 @@ const Advertising = () => {
             </div>
 
             <style jsx>{`
-                .ad-description {
+                .promo-description {
                     font-size: 1.25rem !important;
                     line-height: 1.6 !important;
                     color: var(--brand-navy) !important;
@@ -111,7 +111,7 @@ const Advertising = () => {
                     margin: 14px auto 0;
                 }
 
-                .ad-target-list {
+                .promo-target-list {
                     list-style: none;
                     padding: 0;
                     margin: 20px auto;
@@ -120,7 +120,7 @@ const Advertising = () => {
                     display: inline-block;
                 }
 
-                .ad-target-list li {
+                .promo-target-list li {
                     font-size: 1.1rem;
                     color: var(--brand-navy);
                     font-weight: 500;
@@ -129,7 +129,7 @@ const Advertising = () => {
                     padding-left: 25px;
                 }
 
-                .ad-target-list li::before {
+                .promo-target-list li::before {
                     content: '✓';
                     position: absolute;
                     left: 0;
@@ -137,7 +137,7 @@ const Advertising = () => {
                     font-weight: 900;
                 }
 
-                .ad-promo-note {
+                .promo-note-text {
                     font-size: 0.95rem;
                     color: var(--brand-grey);
                     font-style: italic;
@@ -147,14 +147,14 @@ const Advertising = () => {
                     margin-right: auto;
                 }
 
-                .ad-grid {
+                .promo-grid {
                     display: grid;
                     grid-template-columns: 1fr 1.5fr;
                     gap: 30px;
                     margin-top: 40px;
                 }
 
-                .ad-card {
+                .promo-card {
                     background: white;
                     border-radius: 24px;
                     padding: 40px;
@@ -238,11 +238,11 @@ const Advertising = () => {
                     box-shadow: 0 10px 20px rgba(0, 174, 239, 0.2);
                 }
 
-                .ad-card-list {
+                .promo-card-list {
                     padding: 20px;
                 }
 
-                .ad-card-list h4 {
+                .promo-card-list h4 {
                     font-size: 1.3rem;
                     font-weight: 800;
                     margin-bottom: 25px;
@@ -297,7 +297,7 @@ const Advertising = () => {
                 }
 
                 @media (max-width: 992px) {
-                    .ad-grid {
+                    .promo-grid {
                         grid-template-columns: 1fr;
                     }
                 }
