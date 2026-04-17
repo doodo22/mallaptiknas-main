@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 // GET: Ambil semua S&K dari Supabase
 export async function GET() {
     try {
@@ -22,7 +24,7 @@ export async function POST(request) {
         const data = await request.formData();
         const title = data.get('title');
         const revision = data.get('revision');
-        const urlTarget = data.get('url') || '#';
+        const urlTarget = data.get('url') || '';
         let content = data.get('content') || '';
         const file = data.get('file');
 

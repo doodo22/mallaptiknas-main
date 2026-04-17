@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { validateRequired, successResponse, errorResponse } from '@/lib/apiHelpers';
 
+export const dynamic = 'force-dynamic';
+
 // GET: Ambil semua kategori dari Supabase
 export async function GET() {
     try {

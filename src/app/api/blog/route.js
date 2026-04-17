@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 // ─── HELPER: Upload gambar ke Supabase Storage ───────────────
 async function uploadImageToSupabase(file) {
     const buffer = Buffer.from(await file.arrayBuffer());
