@@ -10,7 +10,7 @@ export default function SnkListPage() {
     useEffect(() => {
         async function fetchTerms() {
             try {
-                const res = await fetch('/api/terms');
+                const res = await fetch('/api/terms', { cache: 'no-store' });
                 if (res.ok) {
                     const data = await res.json();
                     setTerms(data.filter(t => t.isActive));
@@ -89,9 +89,10 @@ export default function SnkListPage() {
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
                                 {terms.map((term) => (
-                                    <Link
+                                        <Link
                                         key={term.id}
-                                        href={term.url || `/snk/${term.slug}`}
+                                        href={term.url && term.url.replace(/#/g, '').trim() !== '' ? term.url : `/snk/${term.slug}`}
+                                        prefetch={false}
                                         className="glass-card p-6 rounded-2xl transition-all duration-300 group flex flex-col justify-between h-full min-h-[180px]"
                                     >
                                         <div className="flex-1">

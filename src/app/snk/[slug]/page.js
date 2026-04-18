@@ -13,7 +13,7 @@ export default function SnkDetailPage() {
     useEffect(() => {
         async function fetchTerm() {
             try {
-                const res = await fetch('/api/terms');
+                const res = await fetch('/api/terms', { cache: 'no-store' });
                 if (!res.ok) throw new Error("Gagal mengambil data");
                 const terms = await res.json();
 
