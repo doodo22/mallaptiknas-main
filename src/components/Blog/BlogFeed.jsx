@@ -170,15 +170,6 @@ const BlogFeed = () => {
                     </div>
                 </div>
 
-                {/* Bagian Newsletter tetap statis */}
-                <div className="panel" style={{ backgroundColor: 'var(--primary)', color: 'white' }}>
-                    <h3 style={{ color: 'white' }}>Newsletter</h3>
-                    <p style={{ fontSize: '13px', opacity: 0.8, marginBottom: '15px' }}>Dapatkan update teknologi terbaru.</p>
-                    <div style={{ display: 'flex', gap: '5px' }}>
-                        <input type="text" placeholder="Email.." style={{ width: '100%', padding: '8px', borderRadius: '5px', border: 'none' }} />
-                        <button style={{ background: 'var(--accent)', border: 'none', padding: '0 15px', color: 'white', borderRadius: '5px', cursor: 'pointer' }}>OK</button>
-                    </div>
-                </div>
             </aside>
         </div>
     );

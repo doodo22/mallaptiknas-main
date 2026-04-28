@@ -1,0 +1,494 @@
+export const faqData = {
+  scm: [
+    {
+      name: "A. Pendaftaran & Verifikasi Akun",
+      faqs: [
+        {
+          q: "Siapa saja yang boleh mendaftar di platform ini?",
+          a: "Hanya badan usaha legal (Principal, Distributor, Master Dealer, Toko1, Toko2, Toko3) yang memiliki NIB dan NPWP aktif."
+        },
+        {
+          q: "Dokumen apa yang harus disiapkan?",
+          a: "Scan NIB dan NPWP. Data harus sesuai dengan profil usaha."
+        },
+        {
+          q: "Berapa lama verifikasi akun?",
+          a: "Maksimal 2×24 jam setelah dokumen lengkap. Notifikasi dikirim via email dan dashboard."
+        },
+        {
+          q: "Bisakah satu NIB dipakai untuk beberapa akun?",
+          a: "Satu NIB bisa untuk satu akun per grade."
+        }
+      ]
+    },
+    {
+      name: "B. Tier, Grade & Aturan Transaksi",
+      faqs: [
+        {
+          q: "Bagaimana struktur tier dan grade?",
+          a: "3 tier dan 6 grade: Principal (L1), Distributor (L2), Master Dealer (L3), Toko1 (L4), Toko2 (L5), Toko3 (L6)."
+        },
+        {
+          q: "Bagaimana aturan “2 level up/down” dalam bertransaksi?",
+          a: "Akun hanya bisa jual-beli dengan akun yang jaraknya maksimal 2 level. Contoh: Principal tidak bisa jual langsung ke Toko. Toko2 tidak bisa langsung jual-beli dengan Distributor (L2)."
+        },
+        {
+          q: "Apakah saya bisa membeli dari akun yang levelnya lebih rendah?",
+          a: "Tidak. Transaksi hanya dari level lebih tinggi ke lebih rendah (searah rantai pasok). Sistem membatasi secara otomatis."
+        }
+      ]
+    },
+    {
+      name: "C. Marketplace (MP) untuk Akun Toko",
+      faqs: [
+        {
+          q: "Siapa yang bisa menjadi seller di marketplace?",
+          a: "Marketplace hanya tersedia untuk akun Toko (Toko1, Toko2, Toko3). Seller wajib merupakan anggota SCM yang aktif."
+        },
+        {
+          q: "Apakah Master Dealer (tier Distributor) juga bisa jualan di marketplace?",
+          a: "Tidak bisa — saat ini marketplace hanya terbuka untuk tier Toko."
+        },
+        {
+          q: "Siapa yang bisa membeli di marketplace?",
+          a: "Terbuka untuk pembeli umum/end-user."
+        },
+        {
+          q: "Apakah toko bisa menjual dengan harga bebas di marketplace?",
+          a: "Toko bebas menentukan harga tayang di Marketplace"
+        },
+        {
+          q: "Bagaimana pengelolaan stok produk toko di marketplace?",
+          a: "Stok berasal dari pembelian toko ke Distributor/MD. Hanya Toko 3 dapat menambahkan sendiri produk yang dimiliki ke etalase marketplace-nya, itupun hanya berlaku untuk barang second."
+        },
+        {
+          q: "Apakah produk di marketplace harus sudah dimiliki fisik oleh toko?",
+          a: "Ya. Marketplace digunakan untuk menjual stok yang sudah dibeli toko, bukan sistem dropship."
+        },
+        {
+          q: "Bagaimana cara pembeli melakukan pembayaran di marketplace?",
+          a: "Melalui Virtual Account (VA) dan QRIS."
+        },
+        {
+          q: "Apakah toko bisa mengatur sendiri tampilan toko di marketplace?",
+          a: "Dashboard toko menyediakan pengaturan dasar etalase. Fitur kustomisasi lebih lanjut sedang dalam pengembangan."
+        }
+      ]
+    },
+    {
+      name: "D. Fitur Kemitraan (Distributor – Toko)",
+      faqs: [
+        {
+          q: "Apa itu fitur kemitraan?",
+          a: "Fitur yang memungkinkan Distributor merekrut Toko di 2 level bawahnya (Master Dealer, Toko1) sebagai mitra. Tujuannya memberikan harga khusus yang lebih rendah dari HET."
+        },
+        {
+          q: "Siapa yang bisa mengajukan kemitraan?",
+          a: "Pengajuan bersifat by request dari pihak Toko kepada Distributor yang diinginkan. Distributor kemudian menyetujui atau menolak."
+        },
+        {
+          q: "Apakah Toko2 dan Toko3 bisa menjadi mitra Distributor?",
+          a: "Tidak. Kemitraan hanya menjangkau maksimal 2 level di bawah Distributor, yaitu Master Dealer (L3) dan Toko1 (L4). Toko2 (L5) berada di luar jangkauan."
+        },
+        {
+          q: "Apakah satu Toko bisa menjadi mitra beberapa Distributor sekaligus?",
+          a: "Ya, sangat bisa, platform tidak membatasi mitra, asal requestnya di accept oleh distributor."
+        },
+        {
+          q: "Apa keuntungan menjadi Toko mitra?",
+          a: "Toko mendapat akses ke harga mitra yang lebih murah dari HET saat membeli dari Distributor mitranya, dan produk mitra tersebut otomatis tampil di posisi atas saat toko mencari produk."
+        },
+        {
+          q: "Bagaimana cara Distributor menentukan harga mitra?",
+          a: "Saat upload tanyang produk, terdapat 2 field harga. Harga mitra dan HET"
+        },
+        {
+          q: "Apakah status kemitraan bisa dibatalkan?",
+          a: "Bisa, tapi hanya di lakukan oleh level yang diatasnya"
+        },
+        {
+          q: "Apakah kemitraan mempengaruhi biaya langganan?",
+          a: "Tidak. Biaya langganan tetap sesuai grade masing-masing."
+        }
+      ]
+    },
+    {
+      name: "E. Harga Mitra, HET, dan Pencarian Produk",
+      faqs: [
+        {
+          q: "Ada berapa jenis harga di platform?",
+          a: "Dua: Harga Mitra (untuk transaksi antara Distributor dan Toko mitranya) dan Harga Eceran Tertinggi (HET) untuk transaksi non-mitra."
+        },
+        {
+          q: "Siapa yang menetapkan HET?",
+          a: "Principal, atau disepakati bersama."
+        },
+        {
+          q: "Bagaimana urutan pencarian produk di dashboard Toko?",
+          a: "Produk dari Distributor mitra dengan harga mitra muncul di urutan teratas. Setelah itu, diikuti produk dari Distributor/Principal non-mitra dengan HET."
+        },
+        {
+          q: "Apakah Toko bisa mencari produk dari Distributor langsung jika bukan mitra?",
+          a: "Toko hanya bisa bertransaksi dengan Distributor jika jarak level memungkinkan (Distributor ke Toko1 masih dalam 2 level, ke Toko2 tidak). Namun, karena kemitraan langsung tidak menjangkau Toko2 ke Distributor, mereka akan melihat produk dari Distributor dengan HET jika memang levelnya diizinkan."
+        },
+        {
+          q: "Apakah harga mitra berlaku untuk transaksi dari Distributor ke Master Dealer juga?",
+          a: "Ya, selama Master Dealer tersebut adalah mitra dari Distributor bersangkutan."
+        },
+        {
+          q: "Jika saya bukan mitra, apakah tetap bisa membeli dari Distributor tersebut?",
+          a: "Bisa, dengan HET. Namun, produk dari Distributor mitra Anda akan diutamakan tampil di pencarian."
+        }
+      ]
+    },
+    {
+      name: "F. Virtual Account (VA)",
+      faqs: [
+        {
+          q: "Metode pembayaran apa yang disediakan?",
+          a: "Semua pembayaran wajib melalui Virtual Account (VA). Tidak ada transfer manual, tunai, atau dompet digital."
+        },
+        {
+          q: "Berapa masa berlaku VA?",
+          a: "VA berlaku 3 hari kalender sejak diterbitkan. Jika batas waktu jatuh pada hari libur nasional, VA bisa digenerate ulang oleh pembeli melalui dashboard transaksi."
+        },
+        {
+          q: "Bagaimana cara mengajukan ulang VA yang kedaluwarsa karena libur?",
+          a: "Buka pesanan terkait, sistem akan menampilkan tombol “Generate VA Baru” jika memenuhi syarat hari libur. Masa berlaku tetap 3 hari dari penerbitan ulang."
+        },
+        {
+          q: "Apakah bisa bayar sebagian melalui VA?",
+          a: "Tidak. VA hanya menerima pembayaran penuh sesuai nominal yang tercantum. Pembayaran sebagian tersedia melalui mekanisme tempo atau termin (lihat bawah) dengan fitur DP."
+        },
+        {
+          q: "Metode transaksi apa saja yang tersedia?",
+          a: "Ada tiga: Cash, Tempo, dan Termin. Metode ini dipilih oleh penjual saat membuat pesanan atau dinegosiasikan sebelumnya."
+        },
+        {
+          q: "Apa itu transaksi Cash?",
+          a: "Pembeli membayar lunas melalui VA, lalu penjual mengirim barang. Barang dikirim setelah pembayaran lunas terkonfirmasi."
+        },
+        {
+          q: "Apa itu transaksi Tempo?",
+          a: "Barang dikirim terlebih dahulu tanpa menunggu pembayaran lunas. Pembeli diberi batas waktu maksimal 60 hari untuk melunasi. Jika ada DP (Down Payment) yang disepakati, DP wajib dibayar dulu sebelum barang dikirim, lalu sisanya dilunasi dalam masa tempo."
+        },
+        {
+          q: "Apa itu transaksi Termin?",
+          a: "Cicilan tetap dengan jumlah angsuran maksimal 12 kali (termin). Bisa disertai DP atau tidak sesuai kesepakatan. Interval antar termin bebas disepakati penjual dan pembeli (misal per minggu, per bulan). Setelah DP lunas (jika ada), setiap termin akan ditagihkan sesuai jadwal."
+        },
+        {
+          q: "Siapa yang menentukan metode transaksi yang dipakai?",
+          a: "Penjual menawarkan metode yang tersedia (Cash, Tempo, Termin) dan pembeli menyetujui. Detail seperti durasi tempo, jumlah termin, dan nominal DP bisa dinegosiasikan saat konfirmasi pesanan."
+        },
+        {
+          q: "Apakah semua grade bisa menggunakan Tempo/Termin?",
+          a: "(Menunggu konfirmasi — kemungkinan disesuaikan dengan tingkat kepercayaan atau riwayat transaksi.)"
+        },
+        {
+          q: "Apa perbedaan Tempo dan Termin?",
+          a: "Tempo = pelunasan satu kali dalam batas waktu 60 hari (dengan atau tanpa DP).\nTermin = pelunasan dicicil dengan maksimal 12 kali angsuran (dengan atau tanpa DP), interval diatur bersama."
+        },
+        {
+          q: "Apakah ada sanksi jika pembeli tidak melunasi tepat waktu di Tempo/Termin?",
+          a: "Ya, terdapat fitur denda. Default denda adalah 0%, tetapi penjual dapat mengatur mulai 0,01% per hari keterlambatan atau nominal tertentu sesuai kesepakatan. Denda akan otomatis ditambahkan ke tagihan berikutnya."
+        },
+        {
+          q: "Bagaimana cara mengaktifkan denda keterlambatan?",
+          a: "Penjual dapat mengatur persentase denda di pengaturan transaksi atau saat membuat pesanan. Jika tidak diatur, denda 0% (tanpa denda)."
+        },
+        {
+          q: "Bagaimana proses pembayaran Tempo/Termin dilakukan?",
+          a: "Setiap kali jatuh tempo (pelunasan tempo atau angsuran termin), sistem otomatis menerbitkan VA baru untuk nominal yang harus dibayar. Pembeli akan menerima notifikasi."
+        },
+        {
+          q: "Apakah pembeli bisa melunasi lebih awal di Tempo/Termin?",
+          a: "Bisa. Pembeli dapat membayar sisa tagihan kapan saja melalui fitur “Pelunasan Dini” di dashboard, yang akan menerbitkan VA untuk total sisa."
+        },
+        {
+          q: "Apakah barang yang sudah dikirim di metode Tempo/Termin bisa diretur?",
+          a: "Ketentuan retur sepenuhnya berdasarkan kesepakatan penjual-pembeli. Platform hanya memfasilitasi pencatatan pengembalian melalui status transaksi."
+        },
+        {
+          q: "Apakah harga produk sudah termasuk PPN?",
+          a: "Secara default, PPN di-set 0% (belum termasuk PPN). Penjual dapat menambahkan PPN dalam transaksi jika diperlukan. Sistem akan menghitung PPN sesuai persentase yang diatur saat pembuatan pesanan."
+        },
+        {
+          q: "Siapa yang mengaktifkan PPN?",
+          a: "Penjual dapat memilih untuk menerapkan PPN pada saat membuat pesanan. Pembeli akan melihat rincian DPP + PPN di halaman konfirmasi."
+        },
+        {
+          q: "Apakah PPN berlaku untuk semua metode transaksi?",
+          a: "Ya, dapat diterapkan pada Cash, Tempo, maupun Termin."
+        },
+        {
+          q: "Apakah PPN mempengaruhi nilai VA yang harus dibayar?",
+          a: "Ya. VA yang diterbitkan akan mencantumkan total yang harus dibayar (DPP + PPN)."
+        },
+        {
+          q: "Apakah platform menyediakan tracking pengiriman?",
+          a: "Tidak. Urusan ekspedisi sepenuhnya ditangani langsung oleh penjual dan pembeli."
+        },
+        {
+          q: "Lalu bagaimana status pengiriman?",
+          a: "Platform hanya memiliki dua notifikasi: Barang Dikirim (dari penjual) dan Barang Diterima (dari pembeli). Status ini diperbarui manual oleh masing-masing pihak di dashboard."
+        },
+        {
+          q: "Di mana saya bisa mengunggah nota, kuitansi, resi, atau dokumen pendukung lainnya?",
+          a: "Setiap pesanan di dashboard transaksi memiliki fitur unggah file. Kedua belah pihak dapat mengunggah dokumen kapan saja. Dokumen ini menjadi arsip transaksi."
+        },
+        {
+          q: "Apa format dan ukuran file yang diizinkan?",
+          a: "PDF, JPG, PNG, maksimal 5 MB per file. Maksimal 5 file per pesanan."
+        },
+        {
+          q: "Apakah ada dokumen wajib yang harus diunggah?",
+          a: "Tidak ada kewajiban dari platform, tetapi sangat disarankan untuk mengunggah bukti pengiriman dan nota sebagai kelengkapan transaksi."
+        },
+        {
+          q: "Apakah platform menahan dana pembayaran (escrow)?",
+          a: "Dana langsung diteruskan ke penjual setelah status Barang Diterima, atau sesuai mekanisme settlement yang dipilih."
+        },
+        {
+          q: "Bagaimana jika terjadi selisih pembayaran atau kesalahan nominal VA?",
+          a: "Hubungi penjual untuk pembatalan/penerbitan ulang pesanan. Sistem akan membatalkan VA lama dan membuat pesanan baru dengan nominal benar."
+        },
+        {
+          q: "Apakah tersedia fitur cicilan dengan bunga?",
+          a: "Saat ini hanya denda keterlambatan (default 0%) yang tersedia. Bunga khusus cicilan belum tersedia, tetapi penjual dapat menyepakati biaya tambahan di luar sistem."
+        },
+        {
+          q: "Apakah ada limit nominal transaksi untuk Tempo/Termin?",
+          a: "Di SCM, tidak ada limit transaksi"
+        },
+        {
+          q: "Apakah fitur DP berlaku wajib atau opsional?",
+          a: "Sepenuhnya opsional dan disepakati oleh penjual-pembeli."
+        },
+        {
+          q: "Bagaimana jika pembeli tidak membayar sama sekali setelah barang diterima di metode Tempo?",
+          a: "Penjual dapat mengaktifkan denda dan menempuh penyelesaian di luar platform dengan bukti pendukung. Platform dapat memfasilitasi mediasi jika diperlukan."
+        }
+      ]
+    },
+    {
+      name: "G. Biaya Berlangganan",
+      faqs: [
+        {
+          q: "Kenapa ada biaya langganan?",
+          a: "Untuk biaya server dan operasional karyawan, agar platform bisa nol fee transaksi."
+        },
+        {
+          q: "Rincian biaya per bulan?",
+          a: "Principal: Rp750.000\nDistributor: Rp400.000\nMaster Dealer: Rp250.000\nToko1: Rp150.000\nToko2: Rp100.000\nToko3: Rp50.000"
+        },
+        {
+          q: "Bagaimana cara membayar langganan?",
+          a: "Via VA yang muncul di dashboard setiap bulan. Harus dilunasi tepat waktu agar akun tidak dibekukan."
+        },
+        {
+          q: "Apakah bisa upgrade/downgrade grade?",
+          a: "Sementara belum tersedia. Hubungi dukungan untuk perubahan."
+        }
+      ]
+    },
+    {
+      name: "H. Dashboard & Laporan",
+      faqs: [
+        {
+          q: "Apakah setiap akun punya dashboard?",
+          a: "Ya, menampilkan ringkasan transaksi, status pesanan, unggahan, dan history langganan."
+        },
+        {
+          q: "Apakah ada laporan khusus untuk toko marketplace?",
+          a: "Ya, ada laproran transaksi untuk SCM dan Marketplate yang terpisah"
+        },
+        {
+          q: "Apakah ada aplikasi seluler?",
+          a: "Untuk SCM, hanya mendukung web saja, sedangkan marketplace web dan android. Sementara belum mendukung IoS."
+        }
+      ]
+    },
+    {
+      name: "I. Keamanan, Kepatuhan & Lain-lain",
+      faqs: [
+        {
+          q: "Apakah data perusahaan aman?",
+          a: "Kami menerapkan enkripsi standar industri. Dokumen NIB/NPWP hanya untuk verifikasi."
+        },
+        {
+          q: "Siapa yang bertanggung jawab atas pelaporan pajak?",
+          a: "Masing-masing pengguna. Nota/kuitansi yang diunggah bisa menjadi arsip pendukung."
+        },
+        {
+          q: "Apakah ada sistem rating atau ulasan untuk seller di marketplace?",
+          a: "Akan dikembangkan. Saat ini belum tersedia."
+        },
+        {
+          q: "Apakah tersedia fitur retur atau pengembalian barang?",
+          a: "Ketentuan retur sepenuhnya disepakati antara penjual dan pembeli. Platform tidak memfasilitasi otomatis."
+        },
+        {
+          q: "Bagaimana cara menyelesaikan sengketa transaksi?",
+          a: "Silakan komunikasi langsung dengan pihak lawan transaksi. Jika diperlukan, unggah bukti pendukung. Tim dukungan dapat menjadi mediator dalam kasus tertentu."
+        },
+        {
+          q: "Apakah platform menyediakan pelatihan atau onboarding?",
+          a: "Materi panduan tertulis tersedia. Sesi onboarding online akan dijadwalkan berkala — info menyusul."
+        },
+        {
+          q: "Apakah ada API untuk integrasi dengan sistem eksternal?",
+          a: "Belum tersedia, masuk dalam roadmap jangka panjang."
+        },
+        {
+          q: "Bagaimana cara mengajukan fitur atau menyampaikan keluhan?",
+          a: "bisa melaui email keluhan di keluhan.inx@gmail.com"
+        }
+      ]
+    }
+  ],
+  mp: [
+    {
+      name: "A. Seller & Produk",
+      faqs: [
+        {
+          q: "Siapa yang bisa menjadi penjual di Marketplace?",
+          a: "Hanya akun Toko (Toko1, Toko2, Toko3) yang terdaftar aktif di platform SCM. Tidak bisa sembarang pihak luar."
+        },
+        {
+          q: "Produk apa yang bisa dijual di Marketplace?",
+          a: "Produk yang dijual merupakan turunan dari produk yang ada di SCM. Artinya, hanya produk yang telah dibeli oleh Toko dari Principal/Distributor di sistem SCM yang bisa dijual kembali di MP."
+        },
+        {
+          q: "Bagaimana cara Toko menambahkan produk ke etalase Marketplace?",
+          a: "Toko tidak bisa menambahkan produk sembarangan. Produk hanya bisa ditayangkan jika Toko memiliki stok dari pembelian di SCM. Sistem akan menarik daftar produk yang dibeli Toko, dan Toko tinggal mengatur harga, deskripsi, dan menayangkannya."
+        },
+        {
+          q: "Apakah stok di MP otomatis mengikuti stok di SCM?",
+          a: "Ya. Jika stok di SCM berkurang (misalnya karena digunakan untuk transaksi SCM lain), stok di MP akan menyesuaikan otomatis. Jika stok SCM habis, produk langsung tidak tersedia di MP."
+        },
+        {
+          q: "Apakah Toko bisa menjual produk yang tidak berasal dari transaksi di platform?",
+          a: "Tidak. Semua produk harus berasal dari rantai SCM yang terekam di platform."
+        }
+      ]
+    },
+    {
+      name: "B. Pembayaran",
+      faqs: [
+        {
+          q: "Metode pembayaran apa yang bisa digunakan pembeli Marketplace?",
+          a: "Pembeli dapat membayar melalui Virtual Account (VA) atau QRIS."
+        },
+        {
+          q: "Apakah ada metode selain Cash di Marketplace?",
+          a: "Tidak. Transaksi di Marketplace bersifat Cash, yaitu barang hanya dikirim setelah pembayaran lunas diterima oleh platform."
+        },
+        {
+          q: "Apakah harga di Marketplace sudah termasuk PPN?",
+          a: "Ya. Semua harga yang tercantum di Marketplace sudah termasuk PPN. Tidak ada tambahan pajak lagi bagi pembeli saat checkout."
+        }
+      ]
+    },
+    {
+      name: "C. Biaya & Pencairan Dana",
+      faqs: [
+        {
+          q: "Apakah ada biaya transaksi di Marketplace?",
+          a: "Ya, platform mengenakan fee 0.8% dari total transaksi, ditanggung oleh seller (Toko). Fee ini dipotong otomatis saat dana diteruskan ke penjual."
+        },
+        {
+          q: "Apakah pembeli (buyer) dikenakan biaya tambahan?",
+          a: "Ya, ada biaya layanan untuk buyer yang besarnya maksimal Rp500 per transaksi. Biaya ini akan muncul di rincian checkout."
+        },
+        {
+          q: "Bagaimana alur pencairan dana ke seller?",
+          a: "Dana pembeli akan ditahan sementara oleh platform sampai pembeli mengonfirmasi bahwa barang telah diterima (status Transaksi Sukses). Setelah itu, dana akan dikirim ke akun penjual, dipotong fee 0.8%."
+        },
+        {
+          q: "Berapa lama waktu yang dibutuhkan untuk pencairan dana?",
+          a: "(Akan diatur — umumnya 1–2 hari kerja setelah konfirmasi pembeli, atau otomatis setelah X hari jika tidak ada komplain.)"
+        },
+        {
+          q: "Bagaimana jika pembeli tidak kunjung mengonfirmasi penerimaan barang?",
+          a: "(Menunggu arahan — kemungkinan sistem akan otomatis menyelesaikan transaksi setelah batas waktu tertentu, misalnya 7 hari setelah status Barang Dikirim.)"
+        }
+      ]
+    },
+    {
+      name: "D.Pembeli (Customer)",
+      faqs: [
+        {
+          q: "Siapa yang bisa berbelanja di Marketplace?",
+          a: "Marketplace terbuka untuk umum, baik perorangan (pribadi) maupun badan usaha/swasta."
+        },
+        {
+          q: "Apakah pembeli wajib memiliki akun untuk bertransaksi?",
+          a: "pembeli diwajibkan daftar akun pembeli ringan, setidaknya untuk pelacakan pesanan dan VA."
+        },
+        {
+          q: "Apakah data transaksi pembeli dirahasiakan?",
+          a: "Data diproses sesuai kebijakan privasi platform. Hanya seller yang akan melihat data pengiriman yang diperlukan."
+        }
+      ]
+    },
+    {
+      name: "E. Diskon, Voucher & Komunikasi",
+      faqs: [
+        {
+          q: "Apakah ada promo atau voucher di Marketplace?",
+          a: "Ya. Toko atau platform dapat mengeluarkan diskon/potongan harga produk maupun voucher ongkir untuk menarik pembeli."
+        },
+        {
+          q: "Bagaimana cara menggunakan voucher?",
+          a: "Pembeli dapat memasukkan kode voucher saat checkout. Sistem akan otomatis mengurangi nominal yang harus dibayar."
+        },
+        {
+          q: "Apakah buyer bisa berkomunikasi dengan seller sebelum membeli?",
+          a: "Ya. Tersedia fitur chat produk di setiap halaman produk, memungkinkan buyer bertanya detail barang atau negosiasi (jika diizinkan toko)."
+        }
+      ]
+    },
+    {
+      name: "F.Pengiriman & Retur",
+      faqs: [
+        {
+          q: "Apakah platform menentukan jasa ekspedisi?",
+          a: "Tidak. Pemilihan jasa ekspedisi diserahkan sepenuhnya kepada seller dan dapat dikomunikasikan dengan buyer melalui chat. Biaya kirim juga diatur oleh seller."
+        },
+        {
+          q: "Apakah ada fitur retur barang?",
+          a: "(Belum ada mekanisme otomatis. Untuk saat ini, kebijakan retur tergantung kesepakatan antara Toko dan pembeli. Platform dapat memfasilitasi mediasi jika diperlukan.)"
+        },
+        {
+          q: "Bagaimana jika barang tidak sesuai pesanan atau rusak?",
+          a: "Pembeli dapat melaporkan melalui sistem pesanan atau chat ke penjual. Jika tidak ada penyelesaian, buyer dapat mengajukan keluhan ke platform."
+        }
+      ]
+    },
+    {
+      name: "G. Pertanyaan Lain yang Mungkin Muncul",
+      faqs: [
+        {
+          q: "Apakah Toko yang terkena sanksi di SCM juga diblokir di Marketplace?",
+          a: "ya, karena akun Toko terintegrasi."
+        },
+        {
+          q: "Apakah ada rating dan ulasan untuk produk di Marketplace?",
+          a: "Fitur ini dalam rencana, belum tersedia saat ini."
+        },
+        {
+          q: "Bisakah Toko mengatur stok khusus untuk Marketplace yang terpisah dari SCM?",
+          a: "Tidak. Stok MP bersumber dari stok SCM yang sama, tidak dapat dipisah. Namun, Toko bisa menonaktifkan sementara produk tertentu."
+        },
+        {
+          q: "Apakah ada batasan jumlah produk yang boleh dijual di Marketplace?",
+          a: "Tidak ada batasan selain ketersediaan stok di SCM."
+        },
+        {
+          q: "Apakah biaya langganan Toko di SCM mencakup akses Marketplace?",
+          a: "Ya. Biaya langganan Toko sudah termasuk hak untuk menggunakan fitur Marketplace tanpa tambahan biaya bulanan khusus.\nJika ada pertanyaan yang belum terjawab atau perlu penyesuaian, silakan sampaikan. FAQ ini akan terus dikembangkan seiring peluncuran fitur Marketplace."
+        }
+      ]
+    }
+  ]
+};

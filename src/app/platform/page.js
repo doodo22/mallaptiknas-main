@@ -200,7 +200,7 @@ export default function PlatformPage() {
 // src/app/platform/page.js (Komponen PricingCard)
 
 function PricingCard({ title, subtitle, desc, icon, benefits, color, basePrice, effectivePrice, priceNote }) {
-    const targetUrl = "https://stage-scm.mallaptiknas.com/register";
+    const targetUrl = "https://scm.mallaptiknas.com/register";
 
     return (
         <div className="pricing-card" style={{ '--theme-color': color }}>

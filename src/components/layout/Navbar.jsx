@@ -80,6 +80,12 @@ const Navbar = () => {
                                     Blog
                                 </Link>
                             </li>
+                            {/* Link Pusat Bantuan */}
+                            <li>
+                                <Link href="/help" className={pathname.startsWith("/help") ? "active" : ""}>
+                                    Help
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </nav>

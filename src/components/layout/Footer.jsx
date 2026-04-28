@@ -36,7 +36,7 @@ const Footer = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="https://stage-scm.mallaptiknas.com/" target="_blank" rel="noreferrer">
+                                <a href="https://scm.mallaptiknas.com/" target="_blank" rel="noreferrer">
                                     SCM Mall Aptiknas
                                 </a>
                             </li>
@@ -52,7 +52,6 @@ const Footer = () => {
                         <ul>
                             <li><a href="/help">Pusat Bantuan</a></li>
                             <li><a href="#advertising">Pasang Iklan</a></li>
-                            <li><a href="https://wa.me/6282123465877" target="_blank" rel="noreferrer">Hubungi Kami</a></li>
                         </ul>
                     </div>
 
