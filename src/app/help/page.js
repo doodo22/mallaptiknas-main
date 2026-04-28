@@ -10,7 +10,7 @@ export const metadata = {
 export default function HelpPage() {
     return (
         <div className="flex flex-col min-h-screen bg-slate-50">
-            
+
             <main className="flex-grow pt-[120px] pb-20 container mx-auto px-4">
                 <div className="text-center max-w-3xl mx-auto mb-12">
                     <h1 className="text-4xl font-extrabold text-gray-800 mb-4">Pusat Bantuan</h1>
@@ -28,7 +28,7 @@ export default function HelpPage() {
                             </div>
                             <h2 className="text-2xl font-bold text-gray-800">FAQ SCM Mall APTIKNAS</h2>
                         </div>
-                        
+
                         <div className="space-y-6">
                             {faqData.scm.map((section, idx) => (
                                 <FaqAccordion key={idx} title={section.name} items={section.faqs} />
@@ -61,11 +61,11 @@ export default function HelpPage() {
                     <div className="relative z-10 max-w-2xl mx-auto">
                         <h2 className="text-3xl font-bold mb-4">Masih Perlu Bantuan?</h2>
                         <p className="text-blue-100 text-lg mb-6">
-                            Jika Anda memiliki keluhan lebih lanjut atau tidak menemukan jawaban di atas, tim kami siap membantu Anda. <br/>
+                            Jika Anda memiliki keluhan lebih lanjut atau tidak menemukan jawaban di atas, tim kami siap membantu Anda. <br />
                             Hubungi email:
                         </p>
                         <div className="inline-block bg-white text-blue-800 font-mono font-bold text-2xl md:text-3xl py-4 px-8 rounded-xl shadow-inner select-all">
-                            keluhan.inx@gmail.com
+                            help.mallaptiknas@gmail.com
                         </div>
                     </div>
                 </div>

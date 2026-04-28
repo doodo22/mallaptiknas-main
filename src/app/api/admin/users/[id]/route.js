@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
-import { readJson, writeJson } from '@/lib/jsonDb';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 
 export async function DELETE(request, { params }) {
     try {
         const { id } = await params;
-        const users = await readJson('users.json');
-        const filteredUsers = users.filter(u => u.id !== parseInt(id));
+        
+        const { error } = await supabase
+            .from('users')
+            .delete()
+            .eq('id', id);
 
-        await writeJson('users.json', filteredUsers);
+        if (error) throw error;
+        
         return NextResponse.json({ message: "User dihapus permanen" });
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

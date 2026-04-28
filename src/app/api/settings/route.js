@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { successResponse, errorResponse } from '@/lib/apiHelpers';
 
 // GET: Ambil settings dari Supabase

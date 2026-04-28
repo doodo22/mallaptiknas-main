@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 import { validateRequired, successResponse, errorResponse } from '@/lib/apiHelpers';
 
 export const dynamic = 'force-dynamic';

@@ -188,16 +188,18 @@ nav {
     /* Sesuai tinggi header */
     right: -100%;
     /* Sembunyi di kanan layar */
-    width: 100%;
+    width: 50%;
+    left: auto;
     height: calc(100vh - 80px);
     background-color: var(--white);
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding-top: 50px;
-    transition: right 0.4s ease-in-out;
-    box-shadow: none;
-    /* Hilangkan shadow internal agar bersih */
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    border-left: 1px solid #E2E8F0;
+    border-bottom-left-radius: 20px;
   }
 
   /* Class .active ditambahkan oleh React State di Navbar.jsx */

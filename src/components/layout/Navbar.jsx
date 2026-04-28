@@ -76,13 +76,21 @@ const Navbar = () => {
                             ))}
                             {/* Link Khusus Blog */}
                             <li>
-                                <Link href="/blog" className={pathname.startsWith("/blog") ? "active" : ""}>
+                                <Link 
+                                    href="/blog" 
+                                    className={pathname.startsWith("/blog") ? "active" : ""}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
                                     Blog
                                 </Link>
                             </li>
                             {/* Link Pusat Bantuan */}
                             <li>
-                                <Link href="/help" className={pathname.startsWith("/help") ? "active" : ""}>
+                                <Link 
+                                    href="/help" 
+                                    className={pathname.startsWith("/help") ? "active" : ""}
+                                    onClick={() => setIsMobileOpen(false)}
+                                >
                                     Help
                                 </Link>
                             </li>
