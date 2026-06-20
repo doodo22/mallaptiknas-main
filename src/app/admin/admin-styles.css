@@ -326,3 +326,30 @@ textarea.input-clean::placeholder {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
     transition: all 0.2s ease;
 }
+
+/* Force light mode for Quill Editor */
+.ql-toolbar.ql-snow {
+    background-color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+.ql-toolbar.ql-snow .ql-stroke {
+    stroke: #334155 !important;
+}
+.ql-toolbar.ql-snow .ql-fill {
+    fill: #334155 !important;
+}
+.ql-toolbar.ql-snow .ql-picker {
+    color: #334155 !important;
+}
+.ql-container.ql-snow {
+    background-color: #ffffff !important;
+    border-color: #475569 !important;
+}
+.ql-editor {
+    color: #0f172a !important;
+    font-size: 16px !important;
+}
+.ql-editor.ql-blank::before {
+    color: #94a3b8 !important;
+    font-style: italic !important;
+}

@@ -4,6 +4,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Notification from "@/components/Notification";
 import SkeletonLoader from "@/components/SkeletonLoader";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+
+const quillModules = {
+    toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image', 'video'],
+        ['clean']
+    ],
+};
 
 export default function AdminMainPage() {
     const router = useRouter();
@@ -786,16 +800,19 @@ export default function AdminMainPage() {
                                             </div>
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label className="block text-sm font-medium text-gray-300">Isi Artikel</label>
-                                            <textarea
-                                                className="input-clean w-full min-h-[500px] p-6 text-base leading-relaxed resize-y"
-                                                value={formData.content}
-                                                onChange={e => setFormData({ ...formData, content: e.target.value })}
-                                                placeholder="Tulis isi artikel di sini... Gunakan format yang jelas dengan paragraf yang terstruktur."
-                                                required
-                                            />
-                                            <p className="text-xs text-gray-500 mt-1">Gunakan paragraf yang jelas. Artikel dapat disusun dengan heading, bullet points, dan gambar untuk keterbacaan yang lebih baik.</p>
+                                        <div className="space-y-2 bg-white rounded-lg overflow-hidden border border-gray-700">
+                                            <div className="bg-slate-800 p-3 text-sm font-medium text-gray-300 border-b border-gray-700">Isi Artikel</div>
+                                            <div className="text-slate-800">
+                                                <ReactQuill
+                                                    theme="snow"
+                                                    value={formData.content}
+                                                    onChange={content => setFormData({ ...formData, content })}
+                                                    modules={quillModules}
+                                                    placeholder="Tulis isi artikel di sini... Anda bisa menyisipkan gambar dan video YouTube melalui toolbar."
+                                                    style={{ height: '500px', border: 'none' }}
+                                                />
+                                            </div>
+                                            <p className="text-xs text-gray-400 mt-0 bg-slate-800 p-3 border-t border-gray-700">Gunakan paragraf yang jelas. Artikel dapat disusun dengan heading, bullet points, dan gambar untuk keterbacaan yang lebih baik.</p>
                                         </div>
 
                                         <div className="space-y-2">

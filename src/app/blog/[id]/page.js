@@ -101,11 +101,10 @@ export default async function BlogDetailPage({ params }) {
                 {/* Konten Utama */}
                 <div className="grid lg:grid-cols-12 gap-12 mt-16">
                     <article className="lg:col-span-8">
-                        <div className="prose-modern">
-                            {post.content?.split("\n").map(p => p.trim()).filter(Boolean).map((p, i) => (
-                                <p key={i}>{p}</p>
-                            ))}
-                        </div>
+                        <div 
+                            className="prose-modern ql-editor-content"
+                            dangerouslySetInnerHTML={{ __html: post.content }}
+                        />
 
                         {youtubeId && (
                             <div className="youtube-card anim-scale">

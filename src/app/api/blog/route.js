@@ -90,7 +90,7 @@ export async function POST(request) {
             .select('id')
             .order('id', { ascending: false })
             .limit(1)
-            .single();
+            .maybeSingle();
             
         const nextId = maxIdData ? maxIdData.id + 1 : 1;
 

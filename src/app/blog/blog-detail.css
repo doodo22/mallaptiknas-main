@@ -178,3 +178,58 @@
     border-radius: 12px;
     object-fit: cover;
 }
+
+/* Quill Editor Content Overrides */
+.ql-editor-content {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.ql-editor-content * {
+    white-space: pre-wrap;
+    max-width: 100%;
+}
+
+.ql-editor-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.ql-editor-content iframe.ql-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.ql-editor-content h1, .ql-editor-content h2, .ql-editor-content h3 {
+    color: var(--brand-navy);
+    font-family: inherit;
+    font-weight: 700;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.ql-editor-content ul {
+    list-style-type: disc;
+    padding-left: 40px;
+    margin-bottom: 32px;
+}
+
+.ql-editor-content ol {
+    list-style-type: decimal;
+    padding-left: 40px;
+    margin-bottom: 32px;
+}
+
+.ql-editor-content blockquote {
+    border-left: 4px solid var(--brand-blue);
+    padding-left: 20px;
+    color: #64748b;
+    font-style: italic;
+    margin-bottom: 32px;
+}

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
+const supabase = supabaseAdmin; // Alias to bypass RLS for admin operations
 
 // ─── HELPER: Upload gambar ke Supabase Storage ───────────────
 async function uploadImageToSupabase(file) {
