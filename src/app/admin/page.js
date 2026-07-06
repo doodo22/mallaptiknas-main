@@ -74,6 +74,11 @@ export default function AdminMainPage() {
     const [socialSettings, setSocialSettings] = useState({ instagram: "", tiktok: "", youtube: "", linkedin: "", googleForm: "" });
     const [isSavingSettings, setIsSavingSettings] = useState(false);
 
+    // Manuals State
+    const [manualFiles, setManualFiles] = useState({ principal: null, distributor: null, reseller: null, marketplace: null });
+    const [isUploadingManuals, setIsUploadingManuals] = useState(false);
+    const [existingManuals, setExistingManuals] = useState({ principal: "", distributor: "", reseller: "", marketplace: "" });
+
     // Notification helper
     const showNotification = (message, type = 'success') => {
         const id = Date.now();
@@ -240,6 +245,16 @@ export default function AdminMainPage() {
                     googleForm: data.social.googleForm || ""
                 });
             }
+            
+            // Set existing manuals
+            if (data.success && data.data?.site?.manuals) {
+                setExistingManuals({
+                    principal: data.data.site.manuals.principal || "",
+                    distributor: data.data.site.manuals.distributor || "",
+                    reseller: data.data.site.manuals.reseller || "",
+                    marketplace: data.data.site.manuals.marketplace || ""
+                });
+            }
         } catch (err) {
             console.error("Gagal load settings", err);
         } finally {
@@ -269,6 +284,30 @@ export default function AdminMainPage() {
             showNotification('Network error: ' + err.message, 'error');
         } finally {
             setIsSavingSettings(false);
+        }
+    };
+
+    const handleUploadManuals = async (e) => {
+        e.preventDefault();
+        setIsUploadingManuals(true);
+        try {
+            const formData = new FormData();
+            if (manualFiles.principal) formData.append('principal', manualFiles.principal);
+            if (manualFiles.distributor) formData.append('distributor', manualFiles.distributor);
+            if (manualFiles.reseller) formData.append('reseller', manualFiles.reseller);
+            if (manualFiles.marketplace) formData.append('marketplace', manualFiles.marketplace);
+
+            const res = await fetch('/api/admin/manuals', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Gagal upload manuals');
+            
+            showNotification('Buku panduan berhasil diperbarui', 'success');
+            setManualFiles({ principal: null, distributor: null, reseller: null, marketplace: null });
+            fetchSettings();
+        } catch (err) {
+            showNotification('Error: ' + err.message, 'error');
+        } finally {
+            setIsUploadingManuals(false);
         }
     };
 
@@ -589,6 +628,9 @@ export default function AdminMainPage() {
                         </button>
                         <button onClick={() => { setActiveTab("users"); setView("list"); }} className={`nav-item w-full text-left px-4 py-3 rounded-xl transition-all flex items-center gap-3 ${activeTab === "users" ? "active" : ""}`}>
                             <i className="fas fa-users w-5 text-center"></i> Pengguna
+                        </button>
+                        <button onClick={() => { setActiveTab("settings"); setView("list"); }} className={`nav-item w-full text-left px-4 py-3 rounded-xl transition-all flex items-center gap-3 ${activeTab === "settings" ? "active" : ""}`}>
+                            <i className="fas fa-cog w-5 text-center"></i> Pengaturan
                         </button>
                     </nav>
                     <div className="p-4 border-t border-white/5">
@@ -1159,6 +1201,73 @@ export default function AdminMainPage() {
                                     </form>
                                 </div>
                             )
+                        )}
+
+                        {activeTab === "settings" && (
+                            <div className="space-y-6">
+                                <div className="card">
+                                    <h3 className="font-bold text-gray-100 text-xl border-b border-gray-700 pb-4 mb-6">
+                                        <i className="fas fa-file-pdf text-red-500 mr-2"></i> Buku Panduan (User Manual)
+                                    </h3>
+                                    <form onSubmit={handleUploadManuals} className="space-y-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            {/* Principal */}
+                                            <div className="space-y-2 p-4 bg-slate-800/50 rounded-xl border border-gray-700/50">
+                                                <label className="block text-sm font-bold text-blue-400">Manual Principal</label>
+                                                {existingManuals.principal && (
+                                                    <a href={existingManuals.principal} target="_blank" rel="noopener noreferrer" className="text-xs text-green-400 hover:underline block mb-2"><i className="fas fa-check-circle mr-1"></i>Dokumen tersimpan (Lihat)</a>
+                                                )}
+                                                <input 
+                                                    type="file" accept=".pdf" className="input-clean text-sm"
+                                                    onChange={e => setManualFiles({...manualFiles, principal: e.target.files[0]})}
+                                                />
+                                            </div>
+
+                                            {/* Distributor */}
+                                            <div className="space-y-2 p-4 bg-slate-800/50 rounded-xl border border-gray-700/50">
+                                                <label className="block text-sm font-bold text-orange-400">Manual Distributor & MD</label>
+                                                {existingManuals.distributor && (
+                                                    <a href={existingManuals.distributor} target="_blank" rel="noopener noreferrer" className="text-xs text-green-400 hover:underline block mb-2"><i className="fas fa-check-circle mr-1"></i>Dokumen tersimpan (Lihat)</a>
+                                                )}
+                                                <input 
+                                                    type="file" accept=".pdf" className="input-clean text-sm"
+                                                    onChange={e => setManualFiles({...manualFiles, distributor: e.target.files[0]})}
+                                                />
+                                            </div>
+
+                                            {/* Reseller */}
+                                            <div className="space-y-2 p-4 bg-slate-800/50 rounded-xl border border-gray-700/50">
+                                                <label className="block text-sm font-bold text-green-400">Manual Mitra Usaha / Reseller</label>
+                                                {existingManuals.reseller && (
+                                                    <a href={existingManuals.reseller} target="_blank" rel="noopener noreferrer" className="text-xs text-green-400 hover:underline block mb-2"><i className="fas fa-check-circle mr-1"></i>Dokumen tersimpan (Lihat)</a>
+                                                )}
+                                                <input 
+                                                    type="file" accept=".pdf" className="input-clean text-sm"
+                                                    onChange={e => setManualFiles({...manualFiles, reseller: e.target.files[0]})}
+                                                />
+                                            </div>
+
+                                            {/* Marketplace */}
+                                            <div className="space-y-2 p-4 bg-slate-800/50 rounded-xl border border-gray-700/50">
+                                                <label className="block text-sm font-bold text-purple-400">Manual Pengguna Marketplace</label>
+                                                {existingManuals.marketplace && (
+                                                    <a href={existingManuals.marketplace} target="_blank" rel="noopener noreferrer" className="text-xs text-green-400 hover:underline block mb-2"><i className="fas fa-check-circle mr-1"></i>Dokumen tersimpan (Lihat)</a>
+                                                )}
+                                                <input 
+                                                    type="file" accept=".pdf" className="input-clean text-sm"
+                                                    onChange={e => setManualFiles({...manualFiles, marketplace: e.target.files[0]})}
+                                                />
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex justify-end pt-4 border-t border-gray-700">
+                                            <button type="submit" disabled={isUploadingManuals} className="btn btn-primary px-8">
+                                                {isUploadingManuals ? <><i className="fas fa-spinner fa-spin mr-2"></i> Mengunggah...</> : <><i className="fas fa-upload mr-2"></i> Simpan Dokumen</>}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         )}
                     </div>
                 </main>
